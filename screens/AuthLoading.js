@@ -1,9 +1,12 @@
 import React from "react";
-import { AsyncStorage, Alert, View, ActivityIndicator } from "react-native";
-// import CustomActivityIndicator from "../components/CustomActivityIndicator";
+import { Alert, View, ActivityIndicator, Text } from "react-native";
+import { connect } from "react-redux";
 import * as Animatable from "react-native-animatable";
 import * as Font from "expo-font";
+
 import { withAppContextConsumer } from "../components/AppContext";
+import { getHomeConfig } from "../redux/actions";
+
 class AuthLoading extends React.Component {
   static navigationOptions = {
     header: null
@@ -17,21 +20,7 @@ class AuthLoading extends React.Component {
   _loadFontAsync = async () => {
     Font.loadAsync({ diavlo: require("../assets/Diavlo.ttf") })
       .then(async () => {
-        console.log("Font Loaded");
-        // const authToken = await AsyncStorage.getItem("authToken");
-
-        // if (authToken) {
-        //   setTimeout(() => {
-        //     this.props.navigation.navigate("AppDrawerNav");
-        //   }, 1000);
-        // } else {
-        //   setTimeout(() => {
-        //     this.props.navigation.navigate("AuthStack");
-        //   }, 1000);
-        // }
-        setTimeout(() => {
-          this.props.navigation.navigate("AppDrawerNav");
-        }, 1000);
+        this.props.getHomeConfig();
       })
       .catch(() => {
         Alert.alert("Oops Something went wrong.\nPlease restart the App");
@@ -39,6 +28,11 @@ class AuthLoading extends React.Component {
   };
   render() {
     const themes = this.props.themes;
+    if (this.props.general.homeConfig) {
+      setTimeout(() => {
+        this.props.navigation.navigate("AppDrawerNav");
+      }, 1000);
+    }
     return (
       <View
         style={{
@@ -69,15 +63,34 @@ class AuthLoading extends React.Component {
         >
           BingeTroupe
         </Animatable.Text>
-        <ActivityIndicator
-          size="large"
-          hidesWhenStopped={true}
-          animating={true}
-          color={"white"}
-        />
+        <View style={{ position: "absolute", bottom: 5, flexDirection: "row" }}>
+          <ActivityIndicator
+            size="small"
+            hidesWhenStopped={true}
+            animating={true}
+            color={"white"}
+          />
+          <Animatable.Text
+            animation="fadeIn"
+            iterationCount={1}
+            style={{
+              color: "white",
+              marginLeft: 10
+            }}
+          >
+            Loading...
+          </Animatable.Text>
+        </View>
       </View>
     );
   }
 }
 
-export default withAppContextConsumer(AuthLoading);
+const mapStateToProps = state => ({ general: state.general });
+const mapActionsToProps = {
+  getHomeConfig: getHomeConfig
+};
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withAppContextConsumer(AuthLoading));

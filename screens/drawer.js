@@ -5,7 +5,7 @@ import { Content,Icon } from "native-base";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import { connect } from "react-redux";
-import { getProfile, logOut, pushNotifToken } from "../redux/actions";
+// import { getProfile, logOut, pushNotifToken } from "../redux/actions";
 import _ from "lodash";
 // import CustomImagePicker from "../components/CustomImagePicker";
 class Drawer extends React.Component {
@@ -13,7 +13,7 @@ class Drawer extends React.Component {
     try {
       const result = await this.registerForPushNotificationsAsync();
       if (result) {
-        this.props.pushNotificationToken(result);
+        // this.props.pushNotificationToken(result);
       }
     } catch (err) {
       console.log(err.message);
@@ -41,10 +41,6 @@ class Drawer extends React.Component {
     }
   };
   render() {
-    const imageUrl =
-      _.get(this.props, "profile.details.userImageUrl", "") || "";
-    const imageThumbnail =
-      _.get(this.props, "profile.details.userImageThumbnail", "") || "";
     return (
       <View style={styles.container}>
         <View style={styles.header} />
@@ -61,7 +57,7 @@ class Drawer extends React.Component {
               {_.get(
                 this.props,
                 "profile.details.firstName",
-                this.props.profile.email
+                "Guest"
               ) || "Guest"}
             </Text>
           </View>
@@ -182,10 +178,13 @@ const styles = StyleSheet.create({
     padding: 10
   }
 });
-const mapStateToProps = state => ({ user: state.user, profile: state.profile });
+const mapStateToProps = state => ({ 
+  // user: state.user, 
+  // profile: state.profile 
+});
 const mapActionsToProps = {
-  getProfile: getProfile,
-  logOut: logOut,
-  pushNotificationToken: pushNotifToken
+  // getProfile: getProfile,
+  // logOut: logOut,
+  // pushNotificationToken: pushNotifToken
 };
 export default connect(mapStateToProps, mapActionsToProps)(Drawer);

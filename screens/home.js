@@ -28,8 +28,8 @@ class Home extends React.Component {
 
   async componentDidMount() {
     try {
-      this.props.getProfile();
-      this.props.getMeals();
+      // this.props.getProfile();
+      // this.props.getMeals();
     } catch (err) {
       console.log(err.message);
     }
@@ -70,7 +70,7 @@ class Home extends React.Component {
     await this.updateMealsWithQuantityFromCart(mealsProps);
   };
   render() {
-    const { isLoading } = this.props.user;
+    // const { isLoading } = this.props.user;
     const { themes } = this.props;
     return (
       <View
@@ -250,10 +250,13 @@ Home.navigationOptions = {
   header: null
 };
 
-const mapStateToProps = state => ({ user: state.user, profile: state.profile });
+const mapStateToProps = state => ({ 
+  // user: state.user, 
+  // profile: state.profile 
+});
 const mapActionsToProps = {
-  getProfile: getProfile,
-  getMeals: getMeals
+  // getProfile: getProfile,
+  // getMeals: getMeals
 };
 export default connect(
   mapStateToProps,
