@@ -37,7 +37,7 @@ class AuthLoading extends React.Component {
       <View
         style={{
           flex: 1,
-          backgroundColor: themes["light"].primary,
+          backgroundColor: themes.primary,
           justifyContent: "center",
           alignItems: "center"
         }}

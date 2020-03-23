@@ -1,5 +1,16 @@
 import React from "react";
 import NetInfo from "@react-native-community/netinfo";
+const themes = {
+  light: {
+    primary: "#E19D40",
+    secondary: "#E19C10"
+  },
+  dark: {
+    primary: "#ffffff",
+    secondary: "#222222"
+  }
+};
+
 const defaultValue = {
   networkInfo: {
     details: {
@@ -8,16 +19,8 @@ const defaultValue = {
     isConnected: false,
     type: "mobile"
   },
-  themes: {
-    light: {
-      primary: "#E19D40",
-      secondary: "#E19C10"
-    },
-    dark: {
-      foreground: "#ffffff",
-      background: "#222222"
-    }
-  }
+  themeData: themes["light"],
+  theme: "light"
 };
 
 const {
@@ -67,7 +70,7 @@ export const withAppContextConsumer = WrapperComponent => {
         <WrapperComponent
           {...this.props}
           networkInfo={this.context.networkInfo || {}}
-          themes={this.context.themes}
+          themes={this.context.themeData}
         />
       );
     }

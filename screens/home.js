@@ -1,14 +1,22 @@
 import React from "react";
-import { Text, TextInput, View, FlatList, AsyncStorage } from "react-native";
+import { TextInput, View, AsyncStorage, SectionList, Text } from "react-native";
 import { Header, Button, Left, Right, Body, Card, Icon } from "native-base";
 // import Icon from '@expo/vector-icons/Ionicons';
 import { connect } from "react-redux";
-import { getProfile, getMeals } from "../redux/actions";
-import { withAppContextConsumer } from "./../components/AppContext";
+import { getHomeConfig } from "../redux/actions";
+
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
 // import appEventEmitter from "../utils/eventUtil";
 import _ from "lodash";
+
+import { withAppContextConsumer } from "./../components/AppContext";
+import BannerCarousel from "./../components/BannerCarousel";
+import {
+  GenreHeaderComponent,
+  RenderSectionListItem
+} from "../components/HomeSectionListComp";
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -72,6 +80,7 @@ class Home extends React.Component {
   render() {
     // const { isLoading } = this.props.user;
     const { themes } = this.props;
+    // console.log(this.props.general.homeConfig.genresData);
     return (
       <View
         style={{
@@ -81,12 +90,12 @@ class Home extends React.Component {
         }}
       >
         <LinearGradient
-          colors={[themes["light"].secondary, themes["light"].primary]}
+          colors={[themes.secondary, themes.primary]}
           style={{
             borderBottomLeftRadius: 25,
             borderBottomRightRadius: 25,
             elevation: 2,
-            marginBottom: 5
+            marginBottom: 2.5
           }}
         >
           <Header transparent>
@@ -242,6 +251,30 @@ class Home extends React.Component {
             </Animatable.View>
           ) : null}
         </LinearGradient>
+        <View style={{ flex: 1 }}>
+          <SectionList
+            sections={this.props.general.homeConfig.genresData || []}
+            keyExtractor={item => item._id}
+            renderItem={({ item }) => <RenderSectionListItem item={item} />}
+            stickySectionHeadersEnabled={true}
+            initialNumToRender={1}
+            numColumns={2}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 10 }}
+            onRefresh={() => this.props.getHomeConfig()}
+            refreshing={this.props.general.homeConfigLoading || false}
+            renderSectionHeader={({ section: { title } }) => (
+              <GenreHeaderComponent headerData={title} />
+            )}
+            ListHeaderComponent={
+              <BannerCarousel
+                bannerData={
+                  _.get(this.props, "general.homeConfig.banners", []) || []
+                }
+              />
+            }
+          />
+        </View>
       </View>
     );
   }
@@ -250,13 +283,11 @@ Home.navigationOptions = {
   header: null
 };
 
-const mapStateToProps = state => ({ 
-  // user: state.user, 
-  // profile: state.profile 
+const mapStateToProps = state => ({
+  general: state.general
 });
 const mapActionsToProps = {
-  // getProfile: getProfile,
-  // getMeals: getMeals
+  getHomeConfig: getHomeConfig
 };
 export default connect(
   mapStateToProps,
