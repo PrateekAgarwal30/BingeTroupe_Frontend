@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export const ContentListItem = ({ contentData }) => {
+export const ContentListItem = ({ contentData, onContentClick }) => {
   // console.log(contentData.contentThumbnailUrl);
   return (
     <View
@@ -40,7 +40,7 @@ export const ContentListItem = ({ contentData }) => {
       <Animatable.View animation="fadeIn" iterationCount={1}>
         <TouchableHighlight
           onPress={() => {
-            console.log(contentData._id);
+            onContentClick({ id : contentData._id, name : contentData.name});
           }}
           underlayColor={"#E1E0E2"}
           style={{
@@ -91,13 +91,14 @@ export const GenreHeaderComponent = ({ headerData }) => {
   );
 };
 
-export const RenderSectionListItem = ({ item }) => {
-  // console.log(item);
+export const RenderSectionListItem = ({ item, onContentClick }) => {
   return (
     <FlatList
       data={item.flatListData}
       keyExtractor={itemData => itemData._id}
-      renderItem={({ item }) => <ContentListItem contentData={item} />}
+      renderItem={({ item }) => (
+        <ContentListItem contentData={item} onContentClick={onContentClick} />
+      )}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
     />

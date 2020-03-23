@@ -77,6 +77,9 @@ class Home extends React.Component {
     const mealsProps = _.get(this, "props.user.meals", []) || [];
     await this.updateMealsWithQuantityFromCart(mealsProps);
   };
+  _onContentClick = data => {
+    this.props.navigation.navigate("DetailScreen",data);
+  };
   render() {
     // const { isLoading } = this.props.user;
     const { themes } = this.props;
@@ -255,7 +258,12 @@ class Home extends React.Component {
           <SectionList
             sections={this.props.general.homeConfig.genresData || []}
             keyExtractor={item => item._id}
-            renderItem={({ item }) => <RenderSectionListItem item={item} />}
+            renderItem={({ item }) => (
+              <RenderSectionListItem
+                item={item}
+                onContentClick={this._onContentClick}
+              />
+            )}
             stickySectionHeadersEnabled={true}
             initialNumToRender={1}
             numColumns={2}
