@@ -1,17 +1,17 @@
 import React from "react";
-import { TextInput, View, AsyncStorage, SectionList, Text } from "react-native";
-import { Header, Button, Left, Right, Body, Card, Icon } from "native-base";
+import { View, AsyncStorage, Text, Dimensions } from "react-native";
+import { Header, Button, Left, Right, Body, Icon } from "native-base";
 // import Icon from '@expo/vector-icons/Ionicons';
 import { connect } from "react-redux";
 import { getHomeConfig } from "../redux/actions";
 
 import { LinearGradient } from "expo-linear-gradient";
-import * as Animatable from "react-native-animatable";
-// import appEventEmitter from "../utils/eventUtil";
 import _ from "lodash";
 
 import { withAppContextConsumer } from "./../components/AppContext";
-
+import { Video } from "expo-av";
+import { ScreenOrientation } from "expo";
+import appEventUtil from "./../utils/eventUtil";
 class DetailScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -23,65 +23,24 @@ class DetailScreen extends React.Component {
     };
     this.onCartUpdate = this.onCartUpdate;
   }
-  toogleColorViewOpen = () => {
-    this.setState(prevSate => ({
-      colorViewOpen: !prevSate.colorViewOpen
-    }));
-  };
 
   async componentDidMount() {
     try {
-      // this.props.getProfile();
-      // this.props.getMeals();
     } catch (err) {
       console.log(err.message);
     }
-    // appEventEmitter.on("cartUpdated", this.onCartUpdate);
-    // Notifications.addListener(payload => console.log(JSON.stringify(payload)));
   }
-  componentWillUnmount() {
-    // clearInterval(this.interval);
-    // appEventEmitter.removeEventListener("cartUpdated", this.onCartUpdate);
-  }
-  _SearchTextHandler = text => {
-    this.setState(prevState => ({
-      ...prevState,
-      searchText: text
-    }));
-  };
-  updateMealsWithQuantityFromCart = async mealsProps => {
-    const cartAsync = (await AsyncStorage.getItem("cart")) || "[]";
-    const cart = JSON.parse(cartAsync);
-    _.map(mealsProps, mealItem => {
-      let cartItem = _.find(cart, _.matchesProperty("mealId", mealItem._id));
-      mealItem.quantity = cartItem ? cartItem.quantity : 0;
-    });
-    this.setState(prevState => ({
-      ...prevState,
-      mealsWithQuantityFromCart: mealsProps
-    }));
-  };
-  async componentWillReceiveProps(props) {
-    let currenMealProps = _.get(this, "props.user.meals", []) || [];
-    let newMealProps = _.get(props, "user.meals", []) || [];
-    if (currenMealProps !== newMealProps) {
-      await this.updateMealsWithQuantityFromCart(newMealProps);
-    }
-  }
-  onCartUpdate = async () => {
-    const mealsProps = _.get(this, "props.user.meals", []) || [];
-    await this.updateMealsWithQuantityFromCart(mealsProps);
-  };
+
   render() {
     const { params } = this.props.navigation.state;
-    console.log(params);
     const { themes } = this.props;
+    const { width } = Dimensions.get("screen");
     return (
       <View
         style={{
           flex: 1,
           zIndex: 0,
-          backgroundColor: "#EDEEF1"
+          backgroundColor: themes.background
         }}
       >
         <LinearGradient
@@ -114,6 +73,39 @@ class DetailScreen extends React.Component {
             <Right />
           </Header>
         </LinearGradient>
+        <Video
+          source={{
+            uri:
+              "https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/contentVideo/content_1584980855875"
+          }}
+          rate={1.0}
+          volume={1.0}
+          isMuted={false}
+          resizeMode="cover"
+          shouldPlay
+          // isMuted
+          style={{
+            width: width,
+            height: (width * 9) / 16,
+            borderRadius: 20,
+            marginTop: 5
+          }}
+          // posterSource={{ uri: 'https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/contentThumbmail/content_1584980849776' }}
+          // usePoster={true}
+          durationMillis={1000}
+          isPlaying={true}
+          useNativeControls={true}
+          onFullscreenUpdate={async () => {
+            await ScreenOrientation.lockAsync(
+              ScreenOrientation.Orientation.LANDSCAPE_RIGHT
+            );
+          }}
+          orientation={"landscape"}
+          onLoadStart={() => {
+            console.log("onLoadStart");
+          }}
+          ref={videoRef => (this.videoRef = videoRef)}
+        />
       </View>
     );
   }

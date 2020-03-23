@@ -1,19 +1,27 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { Content,Icon } from "native-base";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  AsyncStorage,
+  Switch
+} from "react-native";
+import { Content, Icon } from "native-base";
 // import Icon from '@expo/vector-icons/Ionicons';
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import { connect } from "react-redux";
 // import { getProfile, logOut, pushNotifToken } from "../redux/actions";
 import _ from "lodash";
-// import CustomImagePicker from "../components/CustomImagePicker";
+import { withAppContextConsumer } from "../components/AppContext";
+import appEventUtil from "./../utils/eventUtil";
 class Drawer extends React.Component {
   async componentDidMount() {
     try {
       const result = await this.registerForPushNotificationsAsync();
       if (result) {
-        // this.props.pushNotificationToken(result);
       }
     } catch (err) {
       console.log(err.message);
@@ -40,7 +48,16 @@ class Drawer extends React.Component {
       return;
     }
   };
+  _onThemeChange = async x => {
+    if (x) {
+      await AsyncStorage.setItem("theme", "dark");
+    } else {
+      await AsyncStorage.setItem("theme", "light");
+    }
+    appEventUtil.emit("theme_changed");
+  };
   render() {
+    const { defaultTheme } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.header} />
@@ -54,11 +71,8 @@ class Drawer extends React.Component {
         <View style={styles.body}>
           <View style={styles.bodyContent}>
             <Text style={styles.name}>
-              {_.get(
-                this.props,
-                "profile.details.firstName",
-                "Guest"
-              ) || "Guest"}
+              {_.get(this.props, "profile.details.firstName", "Guest") ||
+                "Guest"}
             </Text>
           </View>
           <Content padder style={styles.buttonContainer1}>
@@ -122,6 +136,22 @@ class Drawer extends React.Component {
                 <Icon name="ios-arrow-forward" style={styles.iconStyle} />
               </View>
             </TouchableOpacity>
+            <View style={styles.buttonWrapper}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  paddingVertical: 10,
+                  paddingHorizontal: 5
+                }}
+              >
+                <Text style={styles.textWrapper}>Dark Mode</Text>
+                <Switch
+                  value={defaultTheme === "dark"}
+                  onValueChange={this._onThemeChange}
+                  thumbColor={'white'}
+                />
+              </View>
+            </View>
           </Content>
         </View>
       </View>
@@ -178,13 +208,16 @@ const styles = StyleSheet.create({
     padding: 10
   }
 });
-const mapStateToProps = state => ({ 
-  // user: state.user, 
-  // profile: state.profile 
+const mapStateToProps = state => ({
+  // user: state.user,
+  // profile: state.profile
 });
 const mapActionsToProps = {
   // getProfile: getProfile,
   // logOut: logOut,
   // pushNotificationToken: pushNotifToken
 };
-export default connect(mapStateToProps, mapActionsToProps)(Drawer);
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withAppContextConsumer(Drawer));

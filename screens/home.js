@@ -78,7 +78,7 @@ class Home extends React.Component {
     await this.updateMealsWithQuantityFromCart(mealsProps);
   };
   _onContentClick = data => {
-    this.props.navigation.navigate("DetailScreen",data);
+    this.props.navigation.navigate("DetailScreen", data);
   };
   render() {
     // const { isLoading } = this.props.user;
@@ -89,7 +89,7 @@ class Home extends React.Component {
         style={{
           flex: 1,
           zIndex: 0,
-          backgroundColor: "#EDEEF1"
+          backgroundColor: themes.background
         }}
       >
         <LinearGradient

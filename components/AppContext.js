@@ -1,13 +1,17 @@
 import React from "react";
 import NetInfo from "@react-native-community/netinfo";
+import { AsyncStorage } from "react-native";
+import appEventUtil from "./../utils/eventUtil";
 const themes = {
   light: {
     primary: "#E19D40",
-    secondary: "#E19C10"
+    secondary: "#E19C10",
+    background: "#EDEEF1"
   },
   dark: {
-    primary: "#ffffff",
-    secondary: "#222222"
+    primary: "#102236",
+    secondary: "#001121",
+    background: "#122c45"
   }
 };
 
@@ -31,7 +35,7 @@ const {
 const AppContextHOC = WrapperComponent => {
   class Child extends React.Component {
     state = defaultValue;
-    componentDidMount() {
+    async componentDidMount() {
       this.unsubscribe = NetInfo.addEventListener(newNetworkState => {
         if (
           JSON.stringify(this.state.networkInfo) !==
@@ -43,11 +47,30 @@ const AppContextHOC = WrapperComponent => {
           });
         }
       });
+      this.onThemeChange();
+      appEventUtil.on("theme_changed", this.onThemeChange);
     }
     componentWillUnmount() {
       console.log("unsubscribed");
       this.unsubscribe();
     }
+    onThemeChange = async () => {
+      console.log("THEME CHANGED");
+      const defaultTheme = await AsyncStorage.getItem("theme");
+      if (defaultTheme === "dark") {
+        this.setState({
+          ...this.state,
+          themeData: themes["dark"],
+          theme: "dark"
+        });
+      } else {
+        this.setState({
+          ...this.state,
+          themeData: themes["light"],
+          theme: "light"
+        });
+      }
+    };
     render() {
       return (
         <AppContextProvider value={this.state}>
@@ -71,6 +94,7 @@ export const withAppContextConsumer = WrapperComponent => {
           {...this.props}
           networkInfo={this.context.networkInfo || {}}
           themes={this.context.themeData}
+          defaultTheme={this.context.theme}
         />
       );
     }
