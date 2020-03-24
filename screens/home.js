@@ -178,27 +178,6 @@ class Home extends React.Component {
                   }}
                 />
               </Button>
-              <Button
-                transparent
-                style={{
-                  marginTop: 5,
-                  marginLeft: 2.5,
-                  paddingLeft: 12.5,
-                  paddingRight: 12.5,
-                  minWidth: 45
-                }}
-                onPress={() => this.props.navigation.navigate("Cart")}
-              >
-                <Icon
-                  name="cart"
-                  style={{
-                    color: "#E1E0E2",
-                    fontSize: 25,
-                    margin: 0,
-                    padding: 0
-                  }}
-                />
-              </Button>
             </Right>
           </Header>
           {this.state.searcToolVisiable ? (

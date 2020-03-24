@@ -1,1 +1,1 @@
-export const ipAddress = "http://192.168.0.20:5000";
+export const ipAddress = "https://binge-troupe.herokuapp.com";

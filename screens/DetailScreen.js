@@ -1,5 +1,11 @@
 import React from "react";
-import { View, AsyncStorage, Text, Dimensions } from "react-native";
+import {
+  View,
+  AsyncStorage,
+  Text,
+  Dimensions,
+  BackHandler
+} from "react-native";
 import { Header, Button, Left, Right, Body, Icon } from "native-base";
 // import Icon from '@expo/vector-icons/Ionicons';
 import { connect } from "react-redux";
@@ -29,6 +35,17 @@ class DetailScreen extends React.Component {
     } catch (err) {
       console.log(err.message);
     }
+  }
+  _onBackPressed = async () => {
+    console.log("_onBackPressed");
+    await ScreenOrientation.lockAsync(ScreenOrientation.Orientation.PORTRAIT);
+  };
+  componentWillMount() {
+    BackHandler.addEventListener("hardwareBackPress", this._onBackPressed);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this._onBackPressed);
   }
 
   render() {
@@ -83,28 +100,38 @@ class DetailScreen extends React.Component {
           isMuted={false}
           resizeMode="cover"
           shouldPlay
-          // isMuted
           style={{
-            width: width,
-            height: (width * 9) / 16,
-            borderRadius: 20,
-            marginTop: 5
+            width: width - 10,
+            height: (width * 9) / 16 - 5,
+            borderRadius: 2,
+            marginTop: 5,
+            marginHorizontal: 5
           }}
-          // posterSource={{ uri: 'https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/contentThumbmail/content_1584980849776' }}
-          // usePoster={true}
           durationMillis={1000}
           isPlaying={true}
           useNativeControls={true}
-          onFullscreenUpdate={async () => {
-            await ScreenOrientation.lockAsync(
-              ScreenOrientation.Orientation.LANDSCAPE_RIGHT
-            );
+          onFullscreenUpdate={async x => {
+            // console.log("onFullscreenUpdate", x);
+            if (x.fullscreenUpdate < 2) {
+              await ScreenOrientation.lockAsync(
+                ScreenOrientation.Orientation.LANDSCAPE
+              );
+            } else {
+              await ScreenOrientation.lockAsync(
+                ScreenOrientation.Orientation.PORTRAIT
+              );
+            }
           }}
           orientation={"landscape"}
           onLoadStart={() => {
             console.log("onLoadStart");
           }}
           ref={videoRef => (this.videoRef = videoRef)}
+          usePoster={true}
+          posterSource={{
+            uri:
+              "https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/banners/sintel-poster.jpg"
+          }}
         />
       </View>
     );
