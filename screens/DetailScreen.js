@@ -4,20 +4,21 @@ import {
   AsyncStorage,
   Text,
   Dimensions,
-  BackHandler
+  BackHandler,
+  ActivityIndicator
 } from "react-native";
-import { Header, Button, Left, Right, Body, Icon } from "native-base";
+import { Header, Button, Left, Right, Body, Icon, Content } from "native-base";
 // import Icon from '@expo/vector-icons/Ionicons';
 import { connect } from "react-redux";
-import { getHomeConfig } from "../redux/actions";
+import { getContentById, clearContentById } from "../redux/actions";
 
 import { LinearGradient } from "expo-linear-gradient";
 import _ from "lodash";
 
 import { withAppContextConsumer } from "./../components/AppContext";
 import { Video } from "expo-av";
+const { width } = Dimensions.get("screen");
 import { ScreenOrientation } from "expo";
-import appEventUtil from "./../utils/eventUtil";
 class DetailScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -32,6 +33,10 @@ class DetailScreen extends React.Component {
 
   async componentDidMount() {
     try {
+      const { params } = this.props.navigation.state;
+      if (params && params.id) {
+        this.props.getContentById(params.id);
+      }
     } catch (err) {
       console.log(err.message);
     }
@@ -42,6 +47,7 @@ class DetailScreen extends React.Component {
   };
   componentWillMount() {
     BackHandler.addEventListener("hardwareBackPress", this._onBackPressed);
+    this.props.clearContentById();
   }
 
   componentWillUnmount() {
@@ -51,7 +57,12 @@ class DetailScreen extends React.Component {
   render() {
     const { params } = this.props.navigation.state;
     const { themes } = this.props;
-    const { width } = Dimensions.get("screen");
+    const { detailPageContentLoading, detailPageContent } = this.props.general;
+    if (detailPageContentLoading || !detailPageContent) {
+      return <ActivityIndicator />;
+    }
+    const pageData = detailPageContent[0];
+    console.log(pageData);
     return (
       <View
         style={{
@@ -90,49 +101,54 @@ class DetailScreen extends React.Component {
             <Right />
           </Header>
         </LinearGradient>
-        <Video
-          source={{
-            uri:
-              "https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/contentVideo/content_1584980855875"
-          }}
-          rate={1.0}
-          volume={1.0}
-          isMuted={false}
-          resizeMode="cover"
-          shouldPlay
-          style={{
-            width: width - 10,
-            height: (width * 9) / 16 - 5,
-            borderRadius: 2,
-            marginTop: 5,
-            marginHorizontal: 5
-          }}
-          durationMillis={1000}
-          isPlaying={true}
-          useNativeControls={true}
-          onFullscreenUpdate={async x => {
-            // console.log("onFullscreenUpdate", x);
-            if (x.fullscreenUpdate < 2) {
-              await ScreenOrientation.lockAsync(
-                ScreenOrientation.Orientation.LANDSCAPE
-              );
-            } else {
-              await ScreenOrientation.lockAsync(
-                ScreenOrientation.Orientation.PORTRAIT
-              );
-            }
-          }}
-          orientation={"landscape"}
-          onLoadStart={() => {
-            console.log("onLoadStart");
-          }}
-          ref={videoRef => (this.videoRef = videoRef)}
-          usePoster={true}
-          posterSource={{
-            uri:
-              "https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/banners/sintel-poster.jpg"
-          }}
-        />
+        <Content>
+          <Video
+            source={{
+              uri:
+                `${pageData.contentVideoUrl}`
+            }}
+            rate={1.0}
+            volume={1.0}
+            isMuted={false}
+            resizeMode="cover"
+            shouldPlay
+            style={{
+              width: width - 10,
+              height: (width * 9) / 16 - 5,
+              borderRadius: 2,
+              marginTop: 5,
+              marginHorizontal: 5
+            }}
+            durationMillis={1000}
+            isPlaying={true}
+            useNativeControls={true}
+            onFullscreenUpdate={async x => {
+              // console.log("onFullscreenUpdate", x);
+              if (x.fullscreenUpdate < 2) {
+                await ScreenOrientation.lockAsync(
+                  ScreenOrientation.Orientation.LANDSCAPE
+                );
+              } else {
+                await ScreenOrientation.lockAsync(
+                  ScreenOrientation.Orientation.PORTRAIT
+                );
+              }
+            }}
+            orientation={"landscape"}
+            onLoadStart={() => {
+              console.log("onLoadStart");
+            }}
+            ref={videoRef => (this.videoRef = videoRef)}
+            usePoster={true}
+            posterSource={{
+              uri:
+                "https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/banners/sintel-poster.jpg"
+            }}
+          />
+          <Text>{pageData.name}</Text>
+          <Text>{pageData.subtitle}</Text>
+          <Text>{pageData.body}</Text>
+        </Content>
       </View>
     );
   }
@@ -145,7 +161,8 @@ const mapStateToProps = state => ({
   general: state.general
 });
 const mapActionsToProps = {
-  getHomeConfig: getHomeConfig
+  getContentById: getContentById,
+  clearContentById: clearContentById
 };
 export default connect(
   mapStateToProps,

@@ -3,7 +3,10 @@ import { GENERAL } from "./actions";
 const initialState = {
   homeConfigErr: null,
   homeConfigLoading: false,
-  homeConfig: null
+  homeConfig: null,
+  detailPageContentErr: null,
+  detailPageContentLoading: false,
+  detailPageContent: null
 };
 const generalDataReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -22,10 +25,37 @@ const generalDataReducer = (state = initialState, action) => {
         homeConfigLoading: false,
         homeConfigErr: action.payload
       };
+    case GENERAL.GET_CONTENT_BY_ID_SENT:
+      return {
+        ...state,
+        detailPageContentErr: null,
+        detailPageContentLoading: true
+      };
+    case GENERAL.GET_CONTENT_BY_ID_FULFILLED:
+      return {
+        ...state,
+        detailPageContentErr: null,
+        detailPageContentLoading: false,
+        detailPageContent: action.payload
+      };
+    case GENERAL.GET_CONTENT_BY_ID_REJECTED:
+      return {
+        ...state,
+        detailPageContentLoading: false,
+        detailPageContentErr: action.payload
+      };
+    case GENERAL.CLEAR_CONTENT_BY_ID:
+      return {
+        ...state,
+        detailPageContentErr: null,
+        detailPageContentLoading: false,
+        detailPageContent: null
+      };
     default:
       return { ...state };
   }
 };
+
 const profileDataReducer = (state = {}, action) => {
   switch (action.type) {
     default:
