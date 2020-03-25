@@ -6,12 +6,20 @@ const themes = {
   light: {
     primary: "#E19D40",
     secondary: "#E19C10",
-    background: "#EDEEF1"
+    background: "#EDEEF1",
+    primaryTextColor: "#000"
   },
   dark: {
-    primary: "#102236",
+    primary: "#001121",
     secondary: "#001121",
-    background: "#122c45"
+    background: "#E1E0E2",
+    primaryTextColor: "#000"
+  },
+  otherOption: {
+    primary: "#001121",
+    secondary: "#001121",
+    background: "#E1E0E2",
+    primaryTextColor: "#fff"
   }
 };
 

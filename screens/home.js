@@ -244,20 +244,19 @@ class Home extends React.Component {
               />
             )}
             stickySectionHeadersEnabled={true}
-            initialNumToRender={1}
-            numColumns={2}
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 10 }}
             onRefresh={() => this.props.getHomeConfig()}
             refreshing={this.props.general.homeConfigLoading || false}
             renderSectionHeader={({ section: { title } }) => (
-              <GenreHeaderComponent headerData={title} />
+              <GenreHeaderComponent headerData={title} themes={themes} />
             )}
             ListHeaderComponent={
               <BannerCarousel
                 bannerData={
                   _.get(this.props, "general.homeConfig.banners", []) || []
                 }
+                themes={themes}
               />
             }
           />

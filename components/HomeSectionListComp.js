@@ -8,30 +8,32 @@ import {
   TouchableHighlight,
   FlatList
 } from "react-native";
-const styles = StyleSheet.create({
-  header: {
-    // backgroundColor: "#EDEEF1",
-    paddingVertical: 2.5,
-    borderRadius: 5
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: "400",
-    marginLeft: 10
-  },
-  noTxnText: {
-    fontSize: 20,
-    paddingVertical: 10,
-    alignSelf: "center"
-  }
-});
+const styles = themes =>
+  StyleSheet.create({
+    header: {
+      backgroundColor: themes.background,
+      paddingVertical: 2.5,
+      borderRadius: 5
+    },
+    headerText: {
+      fontSize: 20,
+      fontWeight: "400",
+      marginLeft: 10,
+      color: themes.primaryTextColor
+    },
+    noTxnText: {
+      fontSize: 20,
+      paddingVertical: 10,
+      alignSelf: "center"
+    }
+  });
 
 export const ContentListItem = ({ contentData, onContentClick }) => {
   // console.log(contentData.contentThumbnailUrl);
   return (
     <View
       style={{
-        backgroundColor: "white",
+        // backgroundColor: "white",
         marginVertical: 2.5,
         marginHorizontal: 2.5,
         borderRadius: 10
@@ -59,7 +61,7 @@ export const ContentListItem = ({ contentData, onContentClick }) => {
               style={{
                 color: "grey",
                 fontSize: 13,
-                marginLeft: 10,
+                marginLeft: 2,
                 fontWeight: "bold"
               }}
             >
@@ -79,14 +81,14 @@ export const NoTxnFound = () => {
     </Animatable.View>
   );
 };
-export const GenreHeaderComponent = ({ headerData }) => {
+export const GenreHeaderComponent = ({ headerData, themes }) => {
   return (
     <Animatable.View
       animation="fadeIn"
       iterationCount={1}
-      style={styles.header}
+      style={styles(themes).header}
     >
-      <Text style={styles.headerText}>{headerData}</Text>
+      <Text style={styles(themes).headerText}>{headerData}</Text>
     </Animatable.View>
   );
 };
