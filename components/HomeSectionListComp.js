@@ -29,7 +29,7 @@ const styles = themes =>
   });
 
 export const ContentListItem = ({ contentData, onContentClick }) => {
-  // console.log(contentData.contentThumbnailUrl);
+  const title = contentData.name;
   return (
     <View
       style={{
@@ -62,10 +62,12 @@ export const ContentListItem = ({ contentData, onContentClick }) => {
                 color: "grey",
                 fontSize: 13,
                 marginLeft: 2,
-                fontWeight: "bold"
+                fontWeight: "bold",
+                width: 100
               }}
+              numberOfLines={2}
             >
-              {contentData.name}
+              {title}
             </Text>
           </View>
         </TouchableHighlight>

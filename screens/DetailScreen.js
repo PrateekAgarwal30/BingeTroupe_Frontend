@@ -62,7 +62,7 @@ class DetailScreen extends React.Component {
       return <ActivityIndicator />;
     }
     const pageData = detailPageContent[0];
-    console.log(pageData);
+    // console.log(pageData);
     return (
       <View
         style={{
@@ -104,14 +104,12 @@ class DetailScreen extends React.Component {
         <Content>
           <Video
             source={{
-              uri:
-                `${pageData.contentVideoUrl}`
+              uri: `${pageData.contentVideoUrl}`
             }}
             rate={1.0}
             volume={1.0}
             isMuted={false}
             resizeMode="cover"
-            shouldPlay
             style={{
               width: width - 10,
               height: (width * 9) / 16 - 5,
@@ -120,10 +118,9 @@ class DetailScreen extends React.Component {
               marginHorizontal: 5
             }}
             durationMillis={1000}
-            isPlaying={true}
-            useNativeControls={true}
+            // isPlaying={true}
+            // useNativeControls={true}
             onFullscreenUpdate={async x => {
-              // console.log("onFullscreenUpdate", x);
               if (x.fullscreenUpdate < 2) {
                 await ScreenOrientation.lockAsync(
                   ScreenOrientation.Orientation.LANDSCAPE
@@ -134,7 +131,7 @@ class DetailScreen extends React.Component {
                 );
               }
             }}
-            orientation={"landscape"}
+            // orientation={"landscape"}
             onLoadStart={() => {
               console.log("onLoadStart");
             }}
@@ -145,9 +142,44 @@ class DetailScreen extends React.Component {
                 "https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/banners/sintel-poster.jpg"
             }}
           />
-          <Text>{pageData.name}</Text>
-          <Text>{pageData.subtitle}</Text>
-          <Text>{pageData.body}</Text>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "400",
+              marginLeft: 10,
+              color: themes.primaryTextColor
+            }}
+          >
+            {pageData.name}
+          </Text>
+          <Text
+            style={{
+              fontSize: 12,
+              fontWeight: "400",
+              marginLeft: 10,
+              color: themes.primaryTextColor
+            }}
+          >
+            {pageData.subtitle}
+          </Text>
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: "400",
+              marginLeft: 10,
+              marginTop: 10,
+              color: themes.primaryTextColor
+            }}
+          >
+            {pageData.body}
+          </Text>
+          <Button
+            onPress={() => {
+              this.props.navigation.navigate("FullScreenPlayer");
+            }}
+          >
+            <Text>View</Text>
+          </Button>
         </Content>
       </View>
     );
