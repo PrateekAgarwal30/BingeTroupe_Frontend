@@ -51,7 +51,7 @@ export default class MyCarousel extends React.Component {
           activeDotIndex={activeSlide || 0}
           containerStyle={{
             paddingTop: 5,
-            paddingBottom:2
+            paddingBottom: 2
           }}
           dotStyle={{
             width: 8,
@@ -60,11 +60,16 @@ export default class MyCarousel extends React.Component {
             marginHorizontal: -10,
             backgroundColor: "#E19D40"
           }}
-          inactiveDotStyle={
-            {
-              // Define styles for inactive dots here
-            }
-          }
+          inactiveDotStyle={{
+            width: 10,
+            height: 10,
+            borderRadius: 5,
+            marginHorizontal: -10,
+            // backgroundColor: "#E19D40",
+            borderWidth: 2,
+            backgroundColor: "transparent",
+            borderColor: "#E19D40"
+          }}
           inactiveDotOpacity={0.6}
           inactiveDotScale={0.5}
         />

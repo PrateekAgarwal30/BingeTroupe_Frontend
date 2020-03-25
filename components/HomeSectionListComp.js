@@ -10,7 +10,7 @@ import {
 } from "react-native";
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "#EDEEF1",
+    // backgroundColor: "#EDEEF1",
     paddingVertical: 2.5,
     borderRadius: 5
   },
@@ -40,7 +40,7 @@ export const ContentListItem = ({ contentData, onContentClick }) => {
       <Animatable.View animation="fadeIn" iterationCount={1}>
         <TouchableHighlight
           onPress={() => {
-            onContentClick({ id : contentData._id, name : contentData.name});
+            onContentClick({ id: contentData._id, name: contentData.name });
           }}
           underlayColor={"#E1E0E2"}
           style={{
