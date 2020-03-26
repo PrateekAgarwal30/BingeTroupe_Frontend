@@ -1,19 +1,25 @@
 import React from "react";
 import * as Animatable from "react-native-animatable";
-import moment from "moment";
 import {
   Text,
   StyleSheet,
   View,
   TouchableHighlight,
-  FlatList
+  TouchableOpacity,
+  FlatList,
+  Alert
 } from "react-native";
+import { Icon } from "native-base";
+
 const styles = themes =>
   StyleSheet.create({
     header: {
       backgroundColor: themes.background,
       paddingVertical: 2.5,
-      borderRadius: 5
+      borderRadius: 5,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center"
     },
     headerText: {
       fontSize: 20,
@@ -83,7 +89,12 @@ export const NoTxnFound = () => {
     </Animatable.View>
   );
 };
-export const GenreHeaderComponent = ({ headerData, themes }) => {
+export const GenreHeaderComponent = ({
+  headerData,
+  genreId,
+  themes,
+  count
+}) => {
   return (
     <Animatable.View
       animation="fadeIn"
@@ -91,6 +102,21 @@ export const GenreHeaderComponent = ({ headerData, themes }) => {
       style={styles(themes).header}
     >
       <Text style={styles(themes).headerText}>{headerData}</Text>
+      {count > 3 && (
+        <TouchableOpacity
+          style={{
+            backgroundColor: themes.backgroundColor,
+            marginRight: 5,
+            flexDirection: "row"
+          }}
+          onPress={() => Alert.alert("Work In Progress!")}
+        >
+          <Text style={{ color: "black", fontWeight: "bold", marginRight: 4 }}>
+            {"More"}
+          </Text>
+          <Icon name="ios-arrow-forward" style={{ fontSize: 20 }} />
+        </TouchableOpacity>
+      )}
     </Animatable.View>
   );
 };

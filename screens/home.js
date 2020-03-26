@@ -248,8 +248,13 @@ class Home extends React.Component {
             contentContainerStyle={{ paddingBottom: 10 }}
             onRefresh={() => this.props.getHomeConfig()}
             refreshing={this.props.general.homeConfigLoading || false}
-            renderSectionHeader={({ section: { title } }) => (
-              <GenreHeaderComponent headerData={title} themes={themes} />
+            renderSectionHeader={({ section: { title, genreId, count } }) => (
+              <GenreHeaderComponent
+                headerData={title}
+                genreId={genreId}
+                count={count}
+                themes={themes}
+              />
             )}
             ListHeaderComponent={
               <BannerCarousel
