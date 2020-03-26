@@ -161,12 +161,9 @@ class Home extends React.Component {
                   paddingRight: 12.5,
                   minWidth: 45
                 }}
-                onPress={() =>
-                  this.setState({
-                    ...this.state,
-                    searcToolVisiable: !this.state.searcToolVisiable
-                  })
-                }
+                onPress={() => {
+                  this.props.navigation.navigate("SearchScreen");
+                }}
               >
                 <Icon
                   name="search"

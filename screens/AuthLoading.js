@@ -31,7 +31,7 @@ class AuthLoading extends React.Component {
     if (this.props.general.homeConfig) {
       setTimeout(() => {
         this.props.navigation.navigate("AppDrawerNav");
-      }, 1000);
+      }, 300);
     }
     return (
       <View

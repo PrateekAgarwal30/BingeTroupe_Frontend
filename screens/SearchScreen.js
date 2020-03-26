@@ -1,0 +1,228 @@
+import React from "react";
+import { TextInput, View, AsyncStorage, Text, FlatList } from "react-native";
+import { Header, Button, Left, Right, Body, Icon } from "native-base";
+// import Icon from '@expo/vector-icons/Ionicons';
+import { connect } from "react-redux";
+import { LinearGradient } from "expo-linear-gradient";
+import * as Animatable from "react-native-animatable";
+// import appEventEmitter from "../utils/eventUtil";
+import _ from "lodash";
+
+import { withAppContextConsumer } from "../components/AppContext";
+
+class ScreenScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchText: "",
+      searchResults: []
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      let userSearchPref = await AsyncStorage.getItem("userSearchPref");
+      if (!userSearchPref) {
+        userSearchPref = "[]";
+      }
+      const searchResults = JSON.parse(userSearchPref);
+      this.setState(prevState => ({
+        ...prevState,
+        searchResults: searchResults
+      }));
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+  componentWillUnmount() {}
+
+  _SearchTextHandler = async text => {
+    this.setState(prevState => ({
+      ...prevState,
+      searchText: text
+    }));
+  };
+  _onSubmitEditing = async () => {
+    const searchText = this.state.searchText || "";
+    if (searchText.length < 3) {
+      return;
+    }
+    let userSearchPref = await AsyncStorage.getItem("userSearchPref");
+    if (!userSearchPref) {
+      userSearchPref = "[]";
+    }
+    let searchResults = JSON.parse(userSearchPref);
+    searchResults.unshift(searchText);
+    searchResults = searchResults.slice(0, 15);
+    await AsyncStorage.setItem("userSearchPref", JSON.stringify(searchResults));
+    this.setState(prevState => ({
+      ...prevState,
+      searchResults: searchResults
+    }));
+  };
+  async componentWillReceiveProps(props) {}
+
+  _onContentClick = data => {
+    this.props.navigation.navigate("DetailScreen", data);
+  };
+
+  render() {
+    const { themes } = this.props;
+    return (
+      <View
+        style={{
+          flex: 1,
+          zIndex: 0,
+          backgroundColor: themes.background
+        }}
+      >
+        <LinearGradient
+          colors={[themes.secondary, themes.primary]}
+          style={{
+            borderBottomLeftRadius: 25,
+            borderBottomRightRadius: 25,
+            elevation: 2,
+            marginBottom: 2.5
+          }}
+        >
+          <Header transparent>
+            <Left style={{ flex: 1 }}>
+              <Button
+                transparent
+                onPress={() => this.props.navigation.goBack()}
+              >
+                <Icon
+                  name="ios-arrow-back"
+                  style={{
+                    color: "#E1E0E2",
+                    fontSize: 25,
+                    margin: 0,
+                    padding: 0
+                  }}
+                />
+              </Button>
+            </Left>
+            <Body
+              style={{
+                flex: 12
+              }}
+            >
+              <Animatable.View
+                style={{
+                  flexDirection: "row",
+                  width: "90%",
+                  justifyContent: "center",
+                  alignSelf: "center",
+                  backgroundColor: "#E1E0E2",
+                  marginBottom: 5,
+                  borderRadius: 10
+                }}
+                animation={"zoomIn"}
+                duration={200}
+              >
+                {/* <Icon
+                  name="ios-search"
+                  size={20}
+                  color="#000"
+                  style={{
+                    alignSelf: "center",
+                    marginLeft: 10
+                  }}
+                /> */}
+                <TextInput
+                  style={{
+                    padding: 8,
+                    display: "flex",
+                    fontSize: 15,
+                    width: "84%"
+                  }}
+                  maxLength={25}
+                  placeholder="Search Meal Box..."
+                  value={this.state.searchText}
+                  onChangeText={this._SearchTextHandler}
+                  // onKeyPress={(keyPress) => {console.log(keyPress);}}
+                  onSubmitEditing={this._onSubmitEditing}
+                  // clearButtonMode="while-unless-editing"
+                  // returnKeyType="done"
+                  // autoFocus={true}
+                  // selectionColor={"red"}
+                  // autoCorrect={true}
+                />
+                {this.state.searchText ? (
+                  <Icon
+                    name="md-close"
+                    size={20}
+                    color="#000"
+                    style={{
+                      alignSelf: "center",
+                      marginRight: 15
+                    }}
+                    onPress={() => {
+                      this._SearchTextHandler("");
+                    }}
+                  />
+                ) : (
+                  <Icon
+                    name="ios-mic"
+                    size={20}
+                    color="#000"
+                    style={{
+                      alignSelf: "center",
+                      marginRight: 15
+                    }}
+                  />
+                )}
+              </Animatable.View>
+            </Body>
+            <Right style={{ flex: 0 }}></Right>
+          </Header>
+        </LinearGradient>
+        <View style={{ flex: 1, marginHorizontal: 10 }}>
+          <FlatList
+            data={this.state.searchResults}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginHorizontal: 10,
+                  marginVertical: 10
+                }}
+              >
+                <Text>{item}</Text>
+                <Icon
+                  name="navigate"
+                  style={{ transform: [{ rotate: "45 deg" }], fontSize: 20 }}
+                />
+              </View>
+            )}
+            keyExtractor={(item, index) => item + index}
+            ItemSeparatorComponent={() => (
+              <View
+                style={{
+                  height: 1,
+                  width: "99%",
+                  backgroundColor: "#CED0CE",
+                  alignSelf: "center"
+                }}
+              />
+            )}
+          />
+        </View>
+      </View>
+    );
+  }
+}
+ScreenScreen.navigationOptions = {
+  header: null
+};
+
+const mapStateToProps = state => ({
+  general: state.general
+});
+const mapActionsToProps = {};
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withAppContextConsumer(ScreenScreen));

@@ -86,7 +86,7 @@ class DetailScreen extends React.Component {
                 onPress={() => this.props.navigation.goBack()}
               >
                 <Icon
-                  name="arrow-back"
+                  name="ios-arrow-back"
                   style={{ color: "white", fontSize: 25 }}
                 />
               </Button>

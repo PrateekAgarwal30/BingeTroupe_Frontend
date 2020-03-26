@@ -3,6 +3,7 @@ import Home from "../screens/home";
 import DetailScreen from "../screens/DetailScreen";
 import { createStackNavigator } from "react-navigation";
 import FullScreenPlayer from "../screens/FullScreenPlayer";
+import SearchScreen from "../screens/SearchScreen";
 const AppStack = createStackNavigator(
   {
     Home: {
@@ -10,6 +11,9 @@ const AppStack = createStackNavigator(
     },
     DetailScreen: {
       screen: DetailScreen
+    },
+    SearchScreen: {
+      screen: SearchScreen
     },
     FullScreenPlayer: {
       screen: FullScreenPlayer

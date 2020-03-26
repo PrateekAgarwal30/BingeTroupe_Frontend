@@ -87,7 +87,7 @@ class FullScreenPlayer extends React.Component {
             >
               <Button transparent onPress={this._onBackPressed}>
                 <Icon
-                  name="arrow-back"
+                  name="ios-arrow-back"
                   style={{ color: "white", fontSize: 25 }}
                 />
               </Button>
