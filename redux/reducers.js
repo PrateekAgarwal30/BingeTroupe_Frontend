@@ -6,7 +6,10 @@ const initialState = {
   homeConfig: null,
   detailPageContentErr: null,
   detailPageContentLoading: false,
-  detailPageContent: null
+  detailPageContent: null,
+  searchSuggestionsErr: null,
+  searchSuggestionsLoading: false,
+  searchSuggestions: null
 };
 const generalDataReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -50,6 +53,25 @@ const generalDataReducer = (state = initialState, action) => {
         detailPageContentErr: null,
         detailPageContentLoading: false,
         detailPageContent: null
+      };
+    case GENERAL.GET_SEARCH_SUGGESTION_SENT:
+      return {
+        ...state,
+        searchSuggestionsErr: null,
+        searchSuggestionsLoading: true
+      };
+    case GENERAL.GET_SEARCH_SUGGESTION_FULFILLED:
+      return {
+        ...state,
+        searchSuggestionsErr: null,
+        searchSuggestionsLoading: false,
+        searchSuggestions: action.payload
+      };
+    case GENERAL.GET_SEARCH_SUGGESTION_REJECTED:
+      return {
+        ...state,
+        searchSuggestionsLoading: false,
+        searchSuggestionsErr: action.payload
       };
     default:
       return { ...state };

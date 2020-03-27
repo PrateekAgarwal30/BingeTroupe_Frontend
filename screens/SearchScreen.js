@@ -9,42 +9,35 @@ import * as Animatable from "react-native-animatable";
 import _ from "lodash";
 
 import { withAppContextConsumer } from "../components/AppContext";
+import { getSearchSuggestions } from "../redux/actions";
 
 class ScreenScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: "",
-      searchResults: []
+      searchText: ""
     };
   }
 
   async componentDidMount() {
     try {
-      let userSearchPref = await AsyncStorage.getItem("userSearchPref");
-      if (!userSearchPref) {
-        userSearchPref = "[]";
-      }
-      const searchResults = JSON.parse(userSearchPref);
-      this.setState(prevState => ({
-        ...prevState,
-        searchResults: searchResults
-      }));
+      this.props.getSearchSuggestions();
     } catch (err) {
       console.log(err.message);
     }
   }
   componentWillUnmount() {}
-
   _SearchTextHandler = async text => {
     this.setState(prevState => ({
       ...prevState,
       searchText: text
     }));
+    this.props.getSearchSuggestions(text);
   };
+
   _onSubmitEditing = async () => {
     const searchText = this.state.searchText || "";
-    if (searchText.length < 3) {
+    if (!searchText) {
       return;
     }
     let userSearchPref = await AsyncStorage.getItem("userSearchPref");
@@ -52,13 +45,13 @@ class ScreenScreen extends React.Component {
       userSearchPref = "[]";
     }
     let searchResults = JSON.parse(userSearchPref);
+    const findExistingEntry = _.indexOf(searchResults, searchText);
+    if (findExistingEntry >= 0) {
+      searchResults.splice(findExistingEntry, 1);
+    }
     searchResults.unshift(searchText);
     searchResults = searchResults.slice(0, 15);
     await AsyncStorage.setItem("userSearchPref", JSON.stringify(searchResults));
-    this.setState(prevState => ({
-      ...prevState,
-      searchResults: searchResults
-    }));
   };
   async componentWillReceiveProps(props) {}
 
@@ -179,8 +172,12 @@ class ScreenScreen extends React.Component {
         </LinearGradient>
         <View style={{ flex: 1, marginHorizontal: 10 }}>
           <FlatList
-            data={this.state.searchResults}
+            data={this.props.general.searchSuggestions}
             showsVerticalScrollIndicator={false}
+            refreshing={this.props.general.searchSuggestionsLoading}
+            onRefresh={() => {
+              this.props.getSearchSuggestions(this.state.searchText);
+            }}
             renderItem={({ item }) => (
               <View
                 style={{
@@ -221,7 +218,9 @@ ScreenScreen.navigationOptions = {
 const mapStateToProps = state => ({
   general: state.general
 });
-const mapActionsToProps = {};
+const mapActionsToProps = {
+  getSearchSuggestions: getSearchSuggestions
+};
 export default connect(
   mapStateToProps,
   mapActionsToProps

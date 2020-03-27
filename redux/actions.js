@@ -1,5 +1,6 @@
 import { ipAddress } from "../constants";
 import _ from "lodash";
+import { AsyncStorage } from "react-native";
 
 export const GENERAL = {
   GET_HOME_CONFIG_SENT: "GET_HOME_CONFIG_SENT",
@@ -8,7 +9,10 @@ export const GENERAL = {
   GET_CONTENT_BY_ID_SENT: "GET_CONTENT_BY_ID_SENT",
   GET_CONTENT_BY_ID_FULFILLED: "GET_CONTENT_BY_ID_FULFILLED",
   GET_CONTENT_BY_ID_REJECTED: "GET_CONTENT_BY_ID_REJECTED",
-  CLEAR_CONTENT_BY_ID: "CLEAR_CONTENT_BY_ID"
+  CLEAR_CONTENT_BY_ID: "CLEAR_CONTENT_BY_ID",
+  GET_SEARCH_SUGGESTION_SENT: "GET_SEARCH_SUGGESTION_SENT",
+  GET_SEARCH_SUGGESTION_FULFILLED: "GET_SEARCH_SUGGESTION_FULFILLED",
+  GET_SEARCH_SUGGESTION_REJECTED: "GET_SEARCH_SUGGESTION_REJECTED"
 };
 
 export const getHomeConfig = () => async dispatch => {
@@ -76,5 +80,50 @@ export const clearContentById = () => dispatch => {
     });
   } catch (error) {
     console.log("ERROR clearContentById", error.message);
+  }
+};
+
+export const getSearchSuggestions = searchText => async dispatch => {
+  try {
+    dispatch({
+      type: GENERAL.GET_SEARCH_SUGGESTION_SENT
+    });
+    if (searchText) {
+      const res = await fetch(
+        ipAddress +
+          `/api/general/search_partial_suggestions?searchText=${searchText}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      const result = await res.json();
+      if (result._status === "success") {
+        dispatch({
+          type: GENERAL.GET_SEARCH_SUGGESTION_FULFILLED,
+          payload: result._data
+        });
+      } else {
+        dispatch({
+          type: GENERAL.GET_SEARCH_SUGGESTION_REJECTED,
+          payload: result._message
+        });
+      }
+    } else {
+      let userSearchPref = await AsyncStorage.getItem("userSearchPref");
+      if (!userSearchPref) {
+        userSearchPref = "[]";
+      }
+      const searchResults = JSON.parse(userSearchPref);
+      dispatch({
+        type: GENERAL.GET_SEARCH_SUGGESTION_FULFILLED,
+        payload: searchResults
+      });
+    }
+  } catch (error) {
+    console.log("ERROR getContentById", error.message);
+    return Promise.reject(error.message);
   }
 };
