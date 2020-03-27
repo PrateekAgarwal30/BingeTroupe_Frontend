@@ -57,6 +57,19 @@ class ScreenScreen extends React.Component {
     this.props.navigation.navigate("DetailScreen", data);
   };
 
+  _onRemoveClick = async removeText => {
+    console.log("_onRemoveClick called");
+    const searchResults = this.props.general.searchSuggestions || [];
+    const findExistingEntry = _.indexOf(searchResults, removeText);
+    if (findExistingEntry >= 0) {
+      searchResults.splice(findExistingEntry, 1);
+      await AsyncStorage.setItem(
+        "userSearchPref",
+        JSON.stringify(searchResults)
+      );
+      this.props.getSearchSuggestions(this.state.searchText);
+    }
+  };
   render() {
     const { themes } = this.props;
     return (
@@ -137,10 +150,10 @@ class ScreenScreen extends React.Component {
                   <Icon
                     name="md-close"
                     size={20}
-                    color="#000"
                     style={{
                       alignSelf: "center",
-                      marginRight: 15
+                      marginRight: 15,
+                      color: "#000"
                     }}
                     onPress={() => {
                       this._SearchTextHandler("");
@@ -150,10 +163,10 @@ class ScreenScreen extends React.Component {
                   <Icon
                     name="ios-mic"
                     size={20}
-                    color="#000"
                     style={{
                       alignSelf: "center",
-                      marginRight: 15
+                      marginRight: 15,
+                      color: "#000"
                     }}
                   />
                 )}
@@ -162,7 +175,7 @@ class ScreenScreen extends React.Component {
             <Right style={{ flex: 0 }}></Right>
           </Header>
         </LinearGradient>
-        <View style={{ flex: 1, marginHorizontal: 10 }}>
+        <View style={{ flex: 1 }}>
           <FlatList
             data={this.props.general.searchSuggestions}
             showsVerticalScrollIndicator={false}
@@ -171,35 +184,43 @@ class ScreenScreen extends React.Component {
               this.props.getSearchSuggestions(this.state.searchText);
             }}
             renderItem={({ item }) => (
-              <View
+              <Button
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  marginHorizontal: 10,
-                  marginVertical: 10
+                  paddingHorizontal: 20,
+                  // marginVertical: 10,
+                  backgroundColor: "#E1E0E2",
+                  elevation: 0
                 }}
               >
                 <Text>{item}</Text>
                 {this.state.searchText ? (
                   <Icon
                     name="navigate"
-                    style={{ transform: [{ rotate: "45 deg" }], fontSize: 20 }}
+                    style={{
+                      transform: [{ rotate: "45 deg" }],
+                      fontSize: 20,
+                      color: "#000"
+                    }}
                   />
                 ) : (
                   <Icon
                     name="close-circle-outline"
-                    style={{ fontSize: 20 }}
-                    _onRemoveClick
+                    style={{ fontSize: 20, color: "#000" }}
+                    onPress={() => {
+                      this._onRemoveClick(item);
+                    }}
                   />
                 )}
-              </View>
+              </Button>
             )}
             keyExtractor={(item, index) => item + index}
             ItemSeparatorComponent={() => (
               <View
                 style={{
                   height: 1,
-                  width: "99%",
+                  width: "95%",
                   backgroundColor: "#CED0CE",
                   alignSelf: "center"
                 }}
@@ -211,8 +232,8 @@ class ScreenScreen extends React.Component {
                   style={{
                     fontSize: 16,
                     fontWeight: "500",
-                    marginHorizontal: 10,
-                    marginBottom: 5
+                    marginHorizontal: 20,
+                    marginVertical: 10
                   }}
                 >
                   {this.state.searchText ? "Search Results" : "Search History"}
@@ -220,7 +241,7 @@ class ScreenScreen extends React.Component {
                 <View
                   style={{
                     height: 3,
-                    width: "99%",
+                    width: "95%",
                     backgroundColor: "#CED0CE",
                     alignSelf: "center"
                   }}
