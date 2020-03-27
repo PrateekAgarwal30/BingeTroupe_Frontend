@@ -1,11 +1,9 @@
 import React from "react";
 import { TextInput, View, AsyncStorage, Text, FlatList } from "react-native";
 import { Header, Button, Left, Right, Body, Icon } from "native-base";
-// import Icon from '@expo/vector-icons/Ionicons';
 import { connect } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
-// import appEventEmitter from "../utils/eventUtil";
 import _ from "lodash";
 
 import { withAppContextConsumer } from "../components/AppContext";
@@ -133,13 +131,7 @@ class ScreenScreen extends React.Component {
                   placeholder="Search Meal Box..."
                   value={this.state.searchText}
                   onChangeText={this._SearchTextHandler}
-                  // onKeyPress={(keyPress) => {console.log(keyPress);}}
                   onSubmitEditing={this._onSubmitEditing}
-                  // clearButtonMode="while-unless-editing"
-                  // returnKeyType="done"
-                  // autoFocus={true}
-                  // selectionColor={"red"}
-                  // autoCorrect={true}
                 />
                 {this.state.searchText ? (
                   <Icon
@@ -188,10 +180,18 @@ class ScreenScreen extends React.Component {
                 }}
               >
                 <Text>{item}</Text>
-                <Icon
-                  name="navigate"
-                  style={{ transform: [{ rotate: "45 deg" }], fontSize: 20 }}
-                />
+                {this.state.searchText ? (
+                  <Icon
+                    name="navigate"
+                    style={{ transform: [{ rotate: "45 deg" }], fontSize: 20 }}
+                  />
+                ) : (
+                  <Icon
+                    name="close-circle-outline"
+                    style={{ fontSize: 20 }}
+                    _onRemoveClick
+                  />
+                )}
               </View>
             )}
             keyExtractor={(item, index) => item + index}
@@ -204,6 +204,40 @@ class ScreenScreen extends React.Component {
                   alignSelf: "center"
                 }}
               />
+            )}
+            ListHeaderComponent={() => (
+              <View>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: "500",
+                    marginHorizontal: 10,
+                    marginBottom: 5
+                  }}
+                >
+                  {this.state.searchText ? "Search Results" : "Search History"}
+                </Text>
+                <View
+                  style={{
+                    height: 3,
+                    width: "99%",
+                    backgroundColor: "#CED0CE",
+                    alignSelf: "center"
+                  }}
+                />
+              </View>
+            )}
+            ListEmptyComponent={() => (
+              <View>
+                <Text
+                  style={{
+                    marginHorizontal: 10,
+                    marginBottom: 5
+                  }}
+                >
+                  {this.state.searchText ? "No Suggestion" : "Not Found"}
+                </Text>
+              </View>
             )}
           />
         </View>
