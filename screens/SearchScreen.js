@@ -1,5 +1,12 @@
 import React from "react";
-import { TextInput, View, AsyncStorage, Text, FlatList } from "react-native";
+import {
+  TextInput,
+  View,
+  AsyncStorage,
+  Text,
+  FlatList,
+  Image
+} from "react-native";
 import { Header, Button, Left, Right, Body, Icon } from "native-base";
 import { connect } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
@@ -25,6 +32,7 @@ class ScreenScreen extends React.Component {
     }
   }
   componentWillUnmount() {}
+
   _SearchTextHandler = async text => {
     this.setState(prevState => ({
       ...prevState,
@@ -53,8 +61,24 @@ class ScreenScreen extends React.Component {
   };
   async componentWillReceiveProps(props) {}
 
-  _onContentClick = data => {
+  _onSearchSelection = async data => {
     this.props.navigation.navigate("DetailScreen", data);
+    const searchText = data.name;
+    if (!searchText) {
+      return;
+    }
+    let userSearchPref = await AsyncStorage.getItem("userSearchPref");
+    if (!userSearchPref) {
+      userSearchPref = "[]";
+    }
+    let searchResults = JSON.parse(userSearchPref);
+    const findExistingEntry = _.indexOf(searchResults, searchText);
+    if (findExistingEntry >= 0) {
+      searchResults.splice(findExistingEntry, 1);
+    }
+    searchResults.unshift(searchText);
+    searchResults = searchResults.slice(0, 15);
+    await AsyncStorage.setItem("userSearchPref", JSON.stringify(searchResults));
   };
 
   _onRemoveClick = async removeText => {
@@ -69,6 +93,10 @@ class ScreenScreen extends React.Component {
       );
       this.props.getSearchSuggestions(this.state.searchText);
     }
+  };
+  _onHistorySelection = async searchText => {
+    this.setState({ searchText });
+    this.props.getSearchSuggestions(searchText);
   };
   render() {
     const { themes } = this.props;
@@ -183,38 +211,81 @@ class ScreenScreen extends React.Component {
             onRefresh={() => {
               this.props.getSearchSuggestions(this.state.searchText);
             }}
-            renderItem={({ item }) => (
-              <Button
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  paddingHorizontal: 20,
-                  // marginVertical: 10,
-                  backgroundColor: "#E1E0E2",
-                  elevation: 0
-                }}
-              >
-                <Text>{item}</Text>
-                {this.state.searchText ? (
-                  <Icon
-                    name="navigate"
+            renderItem={({ item }) => {
+              if (typeof item === "object") {
+                return (
+                  <Button
                     style={{
-                      transform: [{ rotate: "45 deg" }],
-                      fontSize: 20,
-                      color: "#000"
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      paddingLeft: 20,
+                      paddingRight: 10,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      marginVertical: 2,
+                      backgroundColor: "#E1E0E2",
+                      elevation: 0
                     }}
-                  />
-                ) : (
-                  <Icon
-                    name="close-circle-outline"
-                    style={{ fontSize: 20, color: "#000" }}
-                    onPress={() => {
-                      this._onRemoveClick(item);
+                    onPress={() =>
+                      this._onSearchSelection({ id: item._id, name: item.name })
+                    }
+                  >
+                    <View style={{ flexDirection: "row" }}>
+                      <Image
+                        style={{
+                          height: 42.5,
+                          width: 61,
+                          borderRadius: 3,
+                          backgroundColor: "red",
+                          marginRight: 20
+                        }}
+                        source={{ uri: item.contentThumbnailUrl }}
+                      />
+                      <View>
+                        <Text style={{ fontSize: 16 }}>{item.name}</Text>
+                        <Text style={{ fontSize: 14 }}>
+                          {_.join(item.genres, ", ")}
+                        </Text>
+                      </View>
+                    </View>
+                    <Icon
+                      name="navigate"
+                      style={{
+                        transform: [{ rotate: "45 deg" }],
+                        fontSize: 20,
+                        color: "#000"
+                      }}
+                    />
+                  </Button>
+                );
+              } else {
+                return (
+                  <Button
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      paddingLeft: 20,
+                      paddingRight: 10,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      marginVertical: 2,
+                      backgroundColor: "#E1E0E2",
+                      elevation: 0
                     }}
-                  />
-                )}
-              </Button>
-            )}
+                    onPress={() => this._onHistorySelection(item)}
+                  >
+                    <Text>{item}</Text>
+                    <Icon
+                      name="close-circle-outline"
+                      style={{ fontSize: 20, color: "#000" }}
+                      onPress={() => {
+                        this._onRemoveClick(item);
+                      }}
+                    />
+                  </Button>
+                );
+              }
+            }}
             keyExtractor={(item, index) => item + index}
             ItemSeparatorComponent={() => (
               <View

@@ -83,7 +83,7 @@ class DetailScreen extends React.Component {
             <Left>
               <Button
                 transparent
-                onPress={() => this.props.navigation.goBack()}
+                onPress={() => this.props.navigation.navigate("Home")}
               >
                 <Icon
                   name="ios-arrow-back"

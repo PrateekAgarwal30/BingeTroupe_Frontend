@@ -90,8 +90,7 @@ export const getSearchSuggestions = searchText => async dispatch => {
     });
     if (searchText) {
       const res = await fetch(
-        ipAddress +
-          `/api/general/search_partial_suggestions?searchText=${searchText}`,
+        ipAddress + `/api/general/search_suggestions?searchText=${searchText}`,
         {
           method: "GET",
           headers: {
