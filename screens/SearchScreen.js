@@ -249,7 +249,7 @@ class ScreenScreen extends React.Component {
                       </View>
                     </View>
                     <Icon
-                      name="navigate"
+                      name="ios-navigate"
                       style={{
                         transform: [{ rotate: "45 deg" }],
                         fontSize: 20,

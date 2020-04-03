@@ -1,13 +1,11 @@
 import React from "react";
 import { TextInput, View, AsyncStorage, SectionList, Text } from "react-native";
 import { Header, Button, Left, Right, Body, Card, Icon } from "native-base";
-// import Icon from '@expo/vector-icons/Ionicons';
 import { connect } from "react-redux";
 import { getHomeConfig } from "../redux/actions";
 
 import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
-// import appEventEmitter from "../utils/eventUtil";
 import _ from "lodash";
 
 import { withAppContextConsumer } from "./../components/AppContext";
@@ -41,13 +39,8 @@ class Home extends React.Component {
     } catch (err) {
       console.log(err.message);
     }
-    // appEventEmitter.on("cartUpdated", this.onCartUpdate);
-    // Notifications.addListener(payload => console.log(JSON.stringify(payload)));
   }
-  componentWillUnmount() {
-    // clearInterval(this.interval);
-    // appEventEmitter.removeEventListener("cartUpdated", this.onCartUpdate);
-  }
+  componentWillUnmount() {}
   _SearchTextHandler = text => {
     this.setState(prevState => ({
       ...prevState,
@@ -104,6 +97,7 @@ class Home extends React.Component {
           <Header transparent>
             <Left style={{ flex: 1 }}>
               <Button
+                rounded
                 transparent
                 style={{
                   marginTop: 5,
@@ -133,17 +127,18 @@ class Home extends React.Component {
             <Right style={{ flex: 2 }}>
               <Button
                 transparent
+                rounded
                 style={{
+                  maxWidth: 45,
                   marginTop: 5,
                   marginLeft: 2.5,
                   paddingLeft: 12.5,
-                  paddingRight: 12.5,
-                  minWidth: 45
+                  paddingRight: 12.5
                 }}
                 onPress={() => this.props.navigation.openDrawer()}
               >
                 <Icon
-                  name="heart"
+                  name="bookmark"
                   style={{
                     color: "#E1E0E2",
                     fontSize: 25,
@@ -154,16 +149,15 @@ class Home extends React.Component {
               </Button>
               <Button
                 transparent
+                rounded
                 style={{
+                  maxWidth: 45,
                   marginTop: 5,
                   marginLeft: 2.5,
                   paddingLeft: 12.5,
-                  paddingRight: 12.5,
-                  minWidth: 45
+                  paddingRight: 12.5
                 }}
-                onPress={() => {
-                  this.props.navigation.navigate("SearchScreen");
-                }}
+                onPress={() => this.props.navigation.navigate("SearchScreen")}
               >
                 <Icon
                   name="search"
