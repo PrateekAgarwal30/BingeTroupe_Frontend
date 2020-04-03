@@ -66,7 +66,8 @@ class FullScreenPlayer extends React.Component {
     });
   };
   render() {
-    // console.log(this.state);
+    const { params } = this.props.navigation.state;
+    console.log(params);
     return (
       <TouchableHighlight
         onLayout-
@@ -104,7 +105,7 @@ class FullScreenPlayer extends React.Component {
           )}
           <Video
             source={{
-              uri: `https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/contentVideo/content_1585077238671`
+              uri: params.videoUri
             }}
             rate={1.0}
             volume={1.0}

@@ -175,7 +175,9 @@ class DetailScreen extends React.Component {
           </Text>
           <Button
             onPress={() => {
-              this.props.navigation.navigate("FullScreenPlayer");
+              this.props.navigation.navigate("FullScreenPlayer", {
+                videoUri: `${pageData.contentVideoUrl}`
+              });
             }}
           >
             <Text>View</Text>
