@@ -3,23 +3,26 @@ import NetInfo from "@react-native-community/netinfo";
 import { AsyncStorage } from "react-native";
 import appEventUtil from "./../utils/eventUtil";
 const themes = {
-  light: {
+  dark: {
     primary: "#E19D40",
     secondary: "#E19C10",
     background: "#EDEEF1",
-    primaryTextColor: "#000"
+    primaryTextColor: "#fff",
+    secondaryTextColor:"#000"
   },
-  dark: {
+  light: {
     primary: "#001121",
     secondary: "#001121",
     background: "#E1E0E2",
-    primaryTextColor: "#000"
+    primaryTextColor: "#000",
+    secondaryTextColor:"#fff"
   },
   otherOption: {
     primary: "#001121",
     secondary: "#001121",
     background: "#E1E0E2",
-    primaryTextColor: "#fff"
+    primaryTextColor: "#fff",
+    secondaryTextColor:"#000"
   }
 };
 

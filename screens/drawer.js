@@ -6,9 +6,10 @@ import {
   TouchableOpacity,
   Alert,
   AsyncStorage,
-  Switch
+  Switch,
+  Image
 } from "react-native";
-import { Content, Icon } from "native-base";
+import { Content, Icon, Button } from "native-base";
 // import Icon from '@expo/vector-icons/Ionicons';
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
@@ -57,102 +58,142 @@ class Drawer extends React.Component {
     appEventUtil.emit("theme_changed");
   };
   render() {
-    const { defaultTheme } = this.props;
+    const { defaultTheme, themes } = this.props;
     return (
-      <View style={styles.container}>
-        <View style={styles.header} />
-        {/* <View>
-          <CustomImagePicker
-            disabled={true}
-            imageUrl={imageUrl ? `${imageUrl}` : null}
-            imageThumbnail={imageThumbnail ? `${imageThumbnail}` : null}
-          />
-        </View> */}
-        <View style={styles.body}>
-          <View style={styles.bodyContent}>
-            <Text style={styles.name}>
-              {_.get(this.props, "profile.details.firstName", "Guest") ||
-                "Guest"}
-            </Text>
-          </View>
-          <Content padder style={styles.buttonContainer1}>
-            <TouchableOpacity
-              style={styles.buttonWrapper}
-              onPress={() => this.props.navigation.navigate("Profile")}
-            >
-              <View style={styles.buttonInsideView}>
-                <Icon name="ios-person" style={styles.iconStyle} />
-                <Text style={styles.textWrapper}>Profile</Text>
-                <Icon name="ios-arrow-forward" style={styles.iconStyle} />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.buttonWrapper}
-              onPress={() => this.props.navigation.navigate("ManageAddress")}
-            >
-              <View style={styles.buttonInsideView}>
-                <Icon name="map" style={styles.iconStyle} />
-                <Text style={styles.textWrapper}>Manage Addresses</Text>
-                <Icon name="ios-arrow-forward" style={styles.iconStyle} />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.buttonWrapper}
-              onPress={() => this.props.navigation.navigate("Wallet")}
-            >
-              <View style={styles.buttonInsideView}>
-                <Icon name="wallet" style={styles.iconStyle} />
-                <Text style={styles.textWrapper}>Wallet</Text>
-                <Icon name="ios-arrow-forward" style={styles.iconStyle} />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.buttonWrapper}
-              onPress={() => this.props.navigation.navigate("ManageOrders")}
-            >
-              <View style={styles.buttonInsideView}>
-                <Icon name="list-box" style={styles.iconStyle} />
-                <Text style={styles.textWrapper}>Manage Orders</Text>
-                <Icon name="ios-arrow-forward" style={styles.iconStyle} />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.buttonWrapper}
-              onPress={() => Alert.alert("Clicked")}
-            >
-              <View style={styles.buttonInsideView}>
-                <Icon name="heart" style={styles.iconStyle} />
-                <Text style={styles.textWrapper}>Favourite</Text>
-                <Icon name="ios-arrow-forward" style={styles.iconStyle} />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.buttonWrapper}
-              onPress={() => this.props.navigation.navigate("ChangePassword")}
-            >
-              <View style={styles.buttonInsideView}>
-                <Icon name="keypad" style={styles.iconStyle} />
-                <Text style={styles.textWrapper}>Change Password</Text>
-                <Icon name="ios-arrow-forward" style={styles.iconStyle} />
-              </View>
-            </TouchableOpacity>
-            <View style={styles.buttonWrapper}>
-              <View
+      <View
+        style={{ backgroundColor: themes.background, flex: 1, marginRight: 0 }}
+      >
+        <View>
+        <Image
+          source={{
+            uri: `https://yt3.ggpht.com/a-/AOh14Gg0cCRgBBQ-kypFs0M6eIxKJgtBWskWCafv8LO7J1U=s88-c-k-c0xffffffff-no-rj-mo`
+          }}
+          style={{
+            height: 50,
+            width: 50,
+            alignSelf: "center",
+            marginTop: 20,
+            borderRadius: 10,marginBottom:10
+          }}
+          iterationCount={1}
+          animation={"fadeIn"}
+        />
+        <Text style={{ fontSize: 16, fontWeight: "500",color:'black',alignSelf:'center' }}>{"Guest"}</Text>
+        <View
                 style={{
-                  flexDirection: "row",
-                  paddingVertical: 10,
-                  paddingHorizontal: 5
+                  height: 1,
+                  width: "95%",
+                  backgroundColor: "#CED0CE",
+                  alignSelf: "center"
                 }}
-              >
-                <Text style={styles.textWrapper}>Dark Mode</Text>
-                <Switch
-                  value={defaultTheme === "dark"}
-                  onValueChange={this._onThemeChange}
-                  thumbColor={'white'}
-                />
+              />
               </View>
-            </View>
-          </Content>
+        <View style={{flex:1}}></View>
+        <Button
+          style={{
+            backgroundColor: themes.primary,
+            elevation: 0,
+            flexDirection: "column",
+            minHeight: 60,
+            marginVertical: 1
+          }}
+          onPress={() => {
+            this.props.navigation.navigate("Home");
+          }}
+        >
+          <Icon
+            name="md-home"
+            style={{
+              fontSize: 24,
+              color: themes.secondaryTextColor
+            }}
+          />
+          <Text style={{ fontSize: 11, fontWeight: "500",color:themes.secondaryTextColor }}>{"Home"}</Text>
+        </Button>
+        <Button
+          style={{
+            backgroundColor: themes.primary,
+            elevation: 0,
+            flexDirection: "column",
+            minHeight: 60,
+            marginVertical: 1
+          }}
+          onPress={() => {
+            this.props.navigation.navigate("SearchScreen");
+          }}
+        >
+          <Icon
+            name="search"
+            style={{
+              fontSize: 24,
+              color: themes.secondaryTextColor
+            }}
+          />
+          <Text style={{ fontSize: 11, fontWeight: "500",color:themes.secondaryTextColor }}>{"Search"}</Text>
+        </Button>
+        <Button
+          style={{
+            backgroundColor: themes.primary,
+            elevation: 0,
+            flexDirection: "column",
+            minHeight: 60,
+            marginVertical: 1
+          }}
+          onPress={() => {
+            this.props.navigation.navigate("MyWatchList");
+          }}
+        >
+          <Icon
+            name="bookmark"
+            style={{
+              fontSize: 24,
+              color: themes.secondaryTextColor
+            }}
+          />
+          <Text style={{ fontSize: 11, fontWeight: "500",color:themes.secondaryTextColor }}>
+            {"My Watchlist"}
+          </Text>
+        </Button>
+        <Button
+          style={{
+            backgroundColor: themes.primary,
+            elevation: 0,
+            flexDirection: "column",
+            minHeight: 60,
+            marginTop:1,
+            marginBottom:2
+          }}
+          onPress={() => {
+            this.props.navigation.navigate("Setting");
+          }}
+        >
+          <Icon
+            name="md-settings"
+            style={{
+              fontSize: 24,
+              color: themes.secondaryTextColor
+            }}
+          />
+          <Text style={{ fontSize: 11, fontWeight: "500",color:themes.secondaryTextColor }}>{"Setting"}</Text>
+        </Button>
+        <View
+          style={{
+            flexDirection: "column",
+            backgroundColor: themes.primary,
+            height: 60,
+            justifyContent: "center",
+            marginVertical: 1,
+            alignItems: "center"
+          }}
+        >
+          <Switch
+            value={defaultTheme === "dark"}
+            onValueChange={this._onThemeChange}
+            thumbColor ={themes.background}
+            trackColor ={"grey"}
+            // disabled={true}
+          />
+          <Text style={{ fontSize: 11, fontWeight: "500",color:themes.secondaryTextColor }}>{"Dark Mode"}</Text>
         </View>
       </View>
     );
