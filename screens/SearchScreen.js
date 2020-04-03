@@ -136,7 +136,7 @@ class ScreenScreen extends React.Component {
             </Left>
             <Body
               style={{
-                flex: 12
+                flex: 11
               }}
             >
               <Animatable.View

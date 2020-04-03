@@ -135,7 +135,7 @@ class Home extends React.Component {
                   paddingLeft: 12.5,
                   paddingRight: 12.5
                 }}
-                onPress={() => this.props.navigation.openDrawer()}
+                onPress={() => this.props.navigation.navigate("MyWatchList")}
               >
                 <Icon
                   name="bookmark"

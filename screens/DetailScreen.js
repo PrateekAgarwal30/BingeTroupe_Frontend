@@ -80,7 +80,7 @@ class DetailScreen extends React.Component {
           }}
         >
           <Header transparent>
-            <Left>
+            <Left style={{ flex: 1 }}>
               <Button
                 transparent
                 onPress={() => this.props.navigation.navigate("Home")}
@@ -91,14 +91,14 @@ class DetailScreen extends React.Component {
                 />
               </Button>
             </Left>
-            <Body>
+            <Body style={{ flex: 10 }}>
               <Text
-                style={{ fontSize: 20, color: "white", fontWeight: "bold" }}
+                style={{ fontSize: 16, color: "white", fontWeight: "bold" }}
               >
                 {params.name}
               </Text>
             </Body>
-            <Right />
+            <Right style={{ flex: 1 }} />
           </Header>
         </LinearGradient>
         <Content>
