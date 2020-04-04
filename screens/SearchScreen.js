@@ -5,7 +5,7 @@ import {
   AsyncStorage,
   Text,
   FlatList,
-  Image
+  Image,
 } from "react-native";
 import { Header, Button, Left, Right, Body, Icon } from "native-base";
 import { connect } from "react-redux";
@@ -15,12 +15,13 @@ import _ from "lodash";
 
 import { withAppContextConsumer } from "../components/AppContext";
 import { getSearchSuggestions } from "../redux/actions";
+import Separator from "../components/common/Separator";
 
 class ScreenScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchText: ""
+      searchText: "",
     };
   }
 
@@ -33,10 +34,10 @@ class ScreenScreen extends React.Component {
   }
   componentWillUnmount() {}
 
-  _SearchTextHandler = async text => {
-    this.setState(prevState => ({
+  _SearchTextHandler = async (text) => {
+    this.setState((prevState) => ({
       ...prevState,
-      searchText: text
+      searchText: text,
     }));
     this.props.getSearchSuggestions(text);
   };
@@ -61,7 +62,7 @@ class ScreenScreen extends React.Component {
   };
   async componentWillReceiveProps(props) {}
 
-  _onSearchSelection = async data => {
+  _onSearchSelection = async (data) => {
     this.props.navigation.navigate("DetailScreen", data);
     const searchText = data.name;
     if (!searchText) {
@@ -81,7 +82,7 @@ class ScreenScreen extends React.Component {
     await AsyncStorage.setItem("userSearchPref", JSON.stringify(searchResults));
   };
 
-  _onRemoveClick = async removeText => {
+  _onRemoveClick = async (removeText) => {
     console.log("_onRemoveClick called");
     const searchResults = this.props.general.searchSuggestions || [];
     const findExistingEntry = _.indexOf(searchResults, removeText);
@@ -94,7 +95,7 @@ class ScreenScreen extends React.Component {
       this.props.getSearchSuggestions(this.state.searchText);
     }
   };
-  _onHistorySelection = async searchText => {
+  _onHistorySelection = async (searchText) => {
     this.setState({ searchText });
     this.props.getSearchSuggestions(searchText);
   };
@@ -105,7 +106,7 @@ class ScreenScreen extends React.Component {
         style={{
           flex: 1,
           zIndex: 0,
-          backgroundColor: themes.background
+          backgroundColor: themes.background,
         }}
       >
         <LinearGradient
@@ -114,7 +115,7 @@ class ScreenScreen extends React.Component {
             borderBottomLeftRadius: 25,
             borderBottomRightRadius: 25,
             elevation: 2,
-            marginBottom: 2.5
+            marginBottom: 2.5,
           }}
         >
           <Header transparent>
@@ -129,14 +130,14 @@ class ScreenScreen extends React.Component {
                     color: "#E1E0E2",
                     fontSize: 25,
                     margin: 0,
-                    padding: 0
+                    padding: 0,
                   }}
                 />
               </Button>
             </Left>
             <Body
               style={{
-                flex: 11
+                flex: 11,
               }}
             >
               <Animatable.View
@@ -147,7 +148,7 @@ class ScreenScreen extends React.Component {
                   alignSelf: "center",
                   backgroundColor: "#E1E0E2",
                   marginBottom: 5,
-                  borderRadius: 10
+                  borderRadius: 10,
                 }}
                 animation={"zoomIn"}
                 duration={200}
@@ -166,7 +167,7 @@ class ScreenScreen extends React.Component {
                     padding: 8,
                     display: "flex",
                     fontSize: 15,
-                    width: "84%"
+                    width: "84%",
                   }}
                   maxLength={25}
                   placeholder="Search Meal Box..."
@@ -181,7 +182,7 @@ class ScreenScreen extends React.Component {
                     style={{
                       alignSelf: "center",
                       marginRight: 15,
-                      color: "#000"
+                      color: "#000",
                     }}
                     onPress={() => {
                       this._SearchTextHandler("");
@@ -194,7 +195,7 @@ class ScreenScreen extends React.Component {
                     style={{
                       alignSelf: "center",
                       marginRight: 15,
-                      color: "#000"
+                      color: "#000",
                     }}
                   />
                 )}
@@ -224,7 +225,7 @@ class ScreenScreen extends React.Component {
                       paddingBottom: 10,
                       marginVertical: 2,
                       backgroundColor: "#E1E0E2",
-                      elevation: 0
+                      elevation: 0,
                     }}
                     onPress={() =>
                       this._onSearchSelection({ id: item._id, name: item.name })
@@ -237,7 +238,7 @@ class ScreenScreen extends React.Component {
                           width: 61,
                           borderRadius: 3,
                           backgroundColor: "red",
-                          marginRight: 20
+                          marginRight: 20,
                         }}
                         source={{ uri: item.contentThumbnailUrl }}
                       />
@@ -253,7 +254,7 @@ class ScreenScreen extends React.Component {
                       style={{
                         transform: [{ rotate: "45 deg" }],
                         fontSize: 20,
-                        color: "#000"
+                        color: "#000",
                       }}
                     />
                   </Button>
@@ -270,7 +271,7 @@ class ScreenScreen extends React.Component {
                       paddingBottom: 10,
                       marginVertical: 2,
                       backgroundColor: "#E1E0E2",
-                      elevation: 0
+                      elevation: 0,
                     }}
                     onPress={() => this._onHistorySelection(item)}
                   >
@@ -287,16 +288,7 @@ class ScreenScreen extends React.Component {
               }
             }}
             keyExtractor={(item, index) => item + index}
-            ItemSeparatorComponent={() => (
-              <View
-                style={{
-                  height: 1,
-                  width: "95%",
-                  backgroundColor: "#CED0CE",
-                  alignSelf: "center"
-                }}
-              />
-            )}
+            ItemSeparatorComponent={() => <Separator />}
             ListHeaderComponent={() => (
               <View>
                 <Text
@@ -304,19 +296,12 @@ class ScreenScreen extends React.Component {
                     fontSize: 16,
                     fontWeight: "500",
                     marginHorizontal: 20,
-                    marginVertical: 10
+                    marginVertical: 10,
                   }}
                 >
                   {this.state.searchText ? "Search Results" : "Search History"}
                 </Text>
-                <View
-                  style={{
-                    height: 3,
-                    width: "95%",
-                    backgroundColor: "#CED0CE",
-                    alignSelf: "center"
-                  }}
-                />
+                <Separator />
               </View>
             )}
             ListEmptyComponent={() => (
@@ -324,7 +309,7 @@ class ScreenScreen extends React.Component {
                 <Text
                   style={{
                     marginHorizontal: 10,
-                    marginBottom: 5
+                    marginBottom: 5,
                   }}
                 >
                   {this.state.searchText ? "No Suggestion" : "Not Found"}
@@ -338,14 +323,14 @@ class ScreenScreen extends React.Component {
   }
 }
 ScreenScreen.navigationOptions = {
-  header: null
+  header: null,
 };
 
-const mapStateToProps = state => ({
-  general: state.general
+const mapStateToProps = (state) => ({
+  general: state.general,
 });
 const mapActionsToProps = {
-  getSearchSuggestions: getSearchSuggestions
+  getSearchSuggestions: getSearchSuggestions,
 };
 export default connect(
   mapStateToProps,

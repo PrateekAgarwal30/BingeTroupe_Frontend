@@ -86,7 +86,7 @@ class Drawer extends React.Component {
           />
           <Text
             style={{
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: "500",
               color: "black",
               alignSelf: "center",
@@ -94,7 +94,7 @@ class Drawer extends React.Component {
           >
             {"Guest"}
           </Text>
-          <Separator />
+          <Separator customHeight={2} customWidth={"80%"}/>
         </View>
         <View
           style={{
