@@ -9,7 +9,7 @@ import { getHomeConfig } from "../redux/actions";
 
 class AuthLoading extends React.Component {
   static navigationOptions = {
-    header: null
+    header: null,
   };
   constructor() {
     super();
@@ -39,7 +39,7 @@ class AuthLoading extends React.Component {
           flex: 1,
           backgroundColor: themes.primary,
           justifyContent: "center",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         {/* <Animatable.Image
@@ -57,8 +57,8 @@ class AuthLoading extends React.Component {
           style={{
             fontSize: 32,
             // fontFamily: "diavlo",
-            color: "white",
-            marginBottom: 20
+            color: themes.secondaryTextColor,
+            marginBottom: 20,
           }}
         >
           BingeTroupe
@@ -68,14 +68,14 @@ class AuthLoading extends React.Component {
             size="small"
             hidesWhenStopped={true}
             animating={true}
-            color={"white"}
+            color={themes.secondaryTextColor}
           />
           <Animatable.Text
             animation="fadeIn"
             iterationCount={1}
             style={{
-              color: "white",
-              marginLeft: 10
+              color: themes.secondaryTextColor,
+              marginLeft: 10,
             }}
           >
             Loading...
@@ -86,9 +86,9 @@ class AuthLoading extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ general: state.general });
+const mapStateToProps = (state) => ({ general: state.general });
 const mapActionsToProps = {
-  getHomeConfig: getHomeConfig
+  getHomeConfig: getHomeConfig,
 };
 export default connect(
   mapStateToProps,

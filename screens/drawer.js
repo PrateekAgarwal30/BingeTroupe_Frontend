@@ -1,19 +1,11 @@
 import React from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  AsyncStorage,
-  Switch,
-  Image,
-} from "react-native";
+import { Text, View, StyleSheet, Image } from "react-native";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import { connect } from "react-redux";
 // import { getProfile, logOut, pushNotifToken } from "../redux/actions";
 import _ from "lodash";
 import { withAppContextConsumer } from "../components/AppContext";
-import appEventUtil from "./../utils/eventUtil";
 import Separator from "../components/common/Separator";
 import DrawerButton from "../components/common/DrawerButton";
 class Drawer extends React.Component {
@@ -47,19 +39,11 @@ class Drawer extends React.Component {
       return;
     }
   };
-  _onThemeChange = async (x) => {
-    if (x) {
-      await AsyncStorage.setItem("theme", "dark");
-    } else {
-      await AsyncStorage.setItem("theme", "light");
-    }
-    appEventUtil.emit("theme_changed");
-  };
   _onDrawerButtonClick = (screenId) => {
     this.props.navigation.navigate(screenId);
   };
   render() {
-    const { defaultTheme, themes, currentActiveScreen } = this.props;
+    const { themes, currentActiveScreen } = this.props;
     return (
       <View
         style={{
@@ -94,7 +78,7 @@ class Drawer extends React.Component {
           >
             {"Guest"}
           </Text>
-          <Separator customHeight={2} customWidth={"80%"}/>
+          <Separator customHeight={2} customWidth={"80%"} />
         </View>
         <View
           style={{
@@ -130,14 +114,14 @@ class Drawer extends React.Component {
           />
           <Separator />
           <DrawerButton
-            label={"Setting"}
+            label={"Settings"}
             iconName={"md-settings"}
-            screenId={"Setting"}
+            screenId={"Settings"}
             onDrawerButtonClick={this._onDrawerButtonClick}
             currentActiveScreen={currentActiveScreen}
             themes={themes}
           />
-          <Separator />
+          {/* <Separator />
           <View
             style={{
               flexDirection: "column",
@@ -163,7 +147,7 @@ class Drawer extends React.Component {
             >
               {"Dark Mode"}
             </Text>
-          </View>
+          </View> */}
         </View>
       </View>
     );

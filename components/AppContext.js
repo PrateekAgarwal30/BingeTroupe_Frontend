@@ -3,7 +3,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { AsyncStorage } from "react-native";
 import appEventUtil from "./../utils/eventUtil";
 const themes = {
-  dark: {
+  otherOption: {
     primary: "#E19D40",
     secondary: "#E19C10",
     background: "#EDEEF1",
@@ -17,10 +17,10 @@ const themes = {
     primaryTextColor: "#000",
     secondaryTextColor: "#fff",
   },
-  otherOption: {
-    primary: "#001121",
-    secondary: "#001121",
-    background: "#E1E0E2",
+  dark: {
+    primary: "white",
+    secondary: "white",
+    background: "grey",
     primaryTextColor: "#fff",
     secondaryTextColor: "#000",
   },
@@ -37,6 +37,7 @@ const defaultValue = {
   themeData: themes["light"],
   theme: "light",
   currentActiveScreen: null,
+  pushNotif: true,
 };
 
 const {
@@ -61,9 +62,14 @@ const AppContextHOC = (WrapperComponent) => {
       });
       this.onThemeChange();
       appEventUtil.on("theme_changed", this.onThemeChange);
+      appEventUtil.on("pushNotif_changed", this.onPushNotifChange);
     }
     componentWillUnmount() {
-      console.log("unsubscribed");
+      appEventUtil.removeEventListener("theme_changed", this.onThemeChange);
+      appEventUtil.removeEventListener(
+        "pushNotif_changed",
+        this.onPushNotifChange
+      );
       this.unsubscribe();
     }
     onThemeChange = async () => {
@@ -80,6 +86,21 @@ const AppContextHOC = (WrapperComponent) => {
           ...this.state,
           themeData: themes["light"],
           theme: "light",
+        });
+      }
+    };
+    onPushNotifChange = async () => {
+      console.log("PUSH NOTIF CHANGED");
+      const pushNotif = await AsyncStorage.getItem("pushNotif");
+      if (pushNotif === "false") {
+        this.setState({
+          ...this.state,
+          pushNotif: false,
+        });
+      } else {
+        this.setState({
+          ...this.state,
+          pushNotif: true,
         });
       }
     };
@@ -121,6 +142,7 @@ export const withAppContextConsumer = (WrapperComponent) => {
           themes={this.context.themeData}
           defaultTheme={this.context.theme}
           currentActiveScreen={this.context.currentActiveScreen}
+          pushNotif={this.context.pushNotif}
         />
       );
     }

@@ -127,7 +127,7 @@ class ScreenScreen extends React.Component {
                 <Icon
                   name="ios-arrow-back"
                   style={{
-                    color: "#E1E0E2",
+                    color: themes.secondaryTextColor,
                     fontSize: 25,
                     margin: 0,
                     padding: 0,

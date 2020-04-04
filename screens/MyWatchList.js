@@ -3,7 +3,7 @@ import {
   // TextInput,
   View,
   // AsyncStorage,
-  Text
+  Text,
   // FlatList,
   // Image
 } from "react-native";
@@ -37,7 +37,7 @@ class MyWatchList extends React.Component {
         style={{
           flex: 1,
           zIndex: 0,
-          backgroundColor: themes.background
+          backgroundColor: themes.background,
         }}
       >
         <LinearGradient
@@ -46,7 +46,7 @@ class MyWatchList extends React.Component {
             borderBottomLeftRadius: 25,
             borderBottomRightRadius: 25,
             elevation: 2,
-            marginBottom: 2.5
+            marginBottom: 2.5,
           }}
         >
           <Header transparent>
@@ -58,21 +58,25 @@ class MyWatchList extends React.Component {
                 <Icon
                   name="ios-arrow-back"
                   style={{
-                    color: "#E1E0E2",
+                    color: themes.secondaryTextColor,
                     fontSize: 25,
                     margin: 0,
-                    padding: 0
+                    padding: 0,
                   }}
                 />
               </Button>
             </Left>
             <Body
               style={{
-                flex: 10
+                flex: 10,
               }}
             >
               <Text
-                style={{ fontSize: 16, color: "white", fontWeight: "bold" }}
+                style={{
+                  fontSize: 16,
+                  color: themes.secondaryTextColor,
+                  fontWeight: "bold",
+                }}
               >
                 {"My WatchList"}
               </Text>
@@ -86,11 +90,11 @@ class MyWatchList extends React.Component {
   }
 }
 MyWatchList.navigationOptions = {
-  header: null
+  header: null,
 };
 
-const mapStateToProps = state => ({
-  general: state.general
+const mapStateToProps = (state) => ({
+  general: state.general,
 });
 const mapActionsToProps = {};
 export default connect(

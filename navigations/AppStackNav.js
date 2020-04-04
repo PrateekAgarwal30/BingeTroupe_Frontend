@@ -5,26 +5,30 @@ import { createStackNavigator } from "react-navigation";
 import FullScreenPlayer from "../screens/FullScreenPlayer";
 import SearchScreen from "../screens/SearchScreen";
 import MyWatchList from "../screens/MyWatchList";
+import Settings from "../screens/Settings";
 const AppStack = createStackNavigator(
   {
     Home: {
-      screen: Home
+      screen: Home,
     },
     DetailScreen: {
-      screen: DetailScreen
+      screen: DetailScreen,
+    },
+    Settings: {
+      screen: Settings,
     },
     MyWatchList: {
-      screen: MyWatchList
+      screen: MyWatchList,
     },
     SearchScreen: {
-      screen: SearchScreen
+      screen: SearchScreen,
     },
     FullScreenPlayer: {
-      screen: FullScreenPlayer
-    }
+      screen: FullScreenPlayer,
+    },
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "Home",
   }
 );
 
