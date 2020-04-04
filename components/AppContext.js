@@ -8,53 +8,54 @@ const themes = {
     secondary: "#E19C10",
     background: "#EDEEF1",
     primaryTextColor: "#fff",
-    secondaryTextColor:"#000"
+    secondaryTextColor: "#000",
   },
   light: {
     primary: "#001121",
     secondary: "#001121",
     background: "#E1E0E2",
     primaryTextColor: "#000",
-    secondaryTextColor:"#fff"
+    secondaryTextColor: "#fff",
   },
   otherOption: {
     primary: "#001121",
     secondary: "#001121",
     background: "#E1E0E2",
     primaryTextColor: "#fff",
-    secondaryTextColor:"#000"
-  }
+    secondaryTextColor: "#000",
+  },
 };
 
 const defaultValue = {
   networkInfo: {
     details: {
-      isConnectionExpensive: false
+      isConnectionExpensive: false,
     },
     isConnected: false,
-    type: "mobile"
+    type: "mobile",
   },
   themeData: themes["light"],
-  theme: "light"
+  theme: "light",
+  currentActiveScreen: null,
 };
 
 const {
   Provider: AppContextProvider,
-  Consumer: AppContextConsumer
+  Consumer: AppContextConsumer,
 } = React.createContext(defaultValue);
 
-const AppContextHOC = WrapperComponent => {
+const AppContextHOC = (WrapperComponent) => {
   class Child extends React.Component {
     state = defaultValue;
     async componentDidMount() {
-      this.unsubscribe = NetInfo.addEventListener(newNetworkState => {
+      this.unsubscribe = NetInfo.addEventListener((newNetworkState) => {
         if (
           JSON.stringify(this.state.networkInfo) !==
           JSON.stringify(newNetworkState)
         ) {
           this.setState({
             ...this.state,
-            networkInfo: newNetworkState
+            networkInfo: newNetworkState,
           });
         }
       });
@@ -72,20 +73,33 @@ const AppContextHOC = WrapperComponent => {
         this.setState({
           ...this.state,
           themeData: themes["dark"],
-          theme: "dark"
+          theme: "dark",
         });
       } else {
         this.setState({
           ...this.state,
           themeData: themes["light"],
-          theme: "light"
+          theme: "light",
         });
+      }
+    };
+    getActiveRouteName = (state) => {
+      const route = state.routes[state.index];
+      if (route.routes) {
+        this.getActiveRouteName(route);
+      } else {
+        if (this.state.currentActiveScreen != route.routeName) {
+          this.setState((prevState) => ({
+            ...prevState,
+            currentActiveScreen: route.routeName,
+          }));
+        }
       }
     };
     render() {
       return (
         <AppContextProvider value={this.state}>
-          <WrapperComponent />
+          <WrapperComponent onNavigationStateChange={this.getActiveRouteName} />
         </AppContextProvider>
       );
     }
@@ -93,11 +107,11 @@ const AppContextHOC = WrapperComponent => {
   return Child;
 };
 
-export const withAppContextConsumer = WrapperComponent => {
+export const withAppContextConsumer = (WrapperComponent) => {
   class Child extends React.Component {
     static contextType = AppContextConsumer;
     static navigationOptions = {
-      header: null
+      header: null,
     };
     render() {
       return (
@@ -106,6 +120,7 @@ export const withAppContextConsumer = WrapperComponent => {
           networkInfo={this.context.networkInfo || {}}
           themes={this.context.themeData}
           defaultTheme={this.context.theme}
+          currentActiveScreen={this.context.currentActiveScreen}
         />
       );
     }
