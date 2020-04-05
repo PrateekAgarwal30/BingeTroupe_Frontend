@@ -51,8 +51,8 @@ class Settings extends React.Component {
         <LinearGradient
           colors={[themes.secondary, themes.primary]}
           style={{
-            borderBottomLeftRadius: 25,
-            borderBottomRightRadius: 25,
+            borderBottomLeftRadius: 5,
+            borderBottomRightRadius: 5,
             elevation: 2,
             marginBottom: 2.5,
           }}

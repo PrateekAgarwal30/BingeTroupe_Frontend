@@ -1,11 +1,10 @@
 import React from "react";
 import {
   View,
-  AsyncStorage,
   Text,
   Dimensions,
   BackHandler,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import { Header, Button, Left, Right, Body, Icon, Content } from "native-base";
 // import Icon from '@expo/vector-icons/Ionicons';
@@ -22,13 +21,7 @@ import { ScreenOrientation } from "expo";
 class DetailScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      colorViewOpen: false,
-      searchText: "",
-      searcToolVisiable: false,
-      mealsWithQuantityFromCart: []
-    };
-    this.onCartUpdate = this.onCartUpdate;
+    this.state = {};
   }
 
   async componentDidMount() {
@@ -68,15 +61,15 @@ class DetailScreen extends React.Component {
         style={{
           flex: 1,
           zIndex: 0,
-          backgroundColor: themes.background
+          backgroundColor: themes.background,
         }}
       >
         <LinearGradient
           colors={[themes.secondary, themes.primary]}
           style={{
-            borderBottomLeftRadius: 25,
-            borderBottomRightRadius: 25,
-            elevation: 2
+            borderBottomLeftRadius: 5,
+            borderBottomRightRadius: 5,
+            elevation: 2,
           }}
         >
           <Header transparent>
@@ -104,7 +97,7 @@ class DetailScreen extends React.Component {
         <Content>
           <Video
             source={{
-              uri: `${pageData.contentVideoUrl}`
+              uri: `${pageData.contentVideoUrl}`,
             }}
             rate={1.0}
             volume={1.0}
@@ -115,12 +108,12 @@ class DetailScreen extends React.Component {
               height: (width * 9) / 16 - 5,
               borderRadius: 2,
               marginTop: 5,
-              marginHorizontal: 5
+              marginHorizontal: 5,
             }}
             durationMillis={1000}
             // isPlaying={true}
             // useNativeControls={true}
-            onFullscreenUpdate={async x => {
+            onFullscreenUpdate={async (x) => {
               if (x.fullscreenUpdate < 2) {
                 await ScreenOrientation.lockAsync(
                   ScreenOrientation.Orientation.LANDSCAPE
@@ -135,11 +128,11 @@ class DetailScreen extends React.Component {
             onLoadStart={() => {
               console.log("onLoadStart");
             }}
-            ref={videoRef => (this.videoRef = videoRef)}
+            ref={(videoRef) => (this.videoRef = videoRef)}
             usePoster={true}
             posterSource={{
               uri:
-                "https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/banners/sintel-poster.jpg"
+                "https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/banners/sintel-poster.jpg",
             }}
           />
           <Text
@@ -147,7 +140,7 @@ class DetailScreen extends React.Component {
               fontSize: 20,
               fontWeight: "400",
               marginLeft: 10,
-              color: themes.primaryTextColor
+              color: themes.primaryTextColor,
             }}
           >
             {pageData.name}
@@ -157,7 +150,7 @@ class DetailScreen extends React.Component {
               fontSize: 12,
               fontWeight: "400",
               marginLeft: 10,
-              color: themes.primaryTextColor
+              color: themes.primaryTextColor,
             }}
           >
             {pageData.subtitle}
@@ -168,7 +161,7 @@ class DetailScreen extends React.Component {
               fontWeight: "400",
               marginLeft: 10,
               marginTop: 10,
-              color: themes.primaryTextColor
+              color: themes.primaryTextColor,
             }}
           >
             {pageData.body}
@@ -176,7 +169,7 @@ class DetailScreen extends React.Component {
           <Button
             onPress={() => {
               this.props.navigation.navigate("FullScreenPlayer", {
-                videoUri: `${pageData.contentVideoUrl}`
+                videoUri: `${pageData.contentVideoUrl}`,
               });
             }}
           >
@@ -188,15 +181,15 @@ class DetailScreen extends React.Component {
   }
 }
 DetailScreen.navigationOptions = {
-  header: null
+  header: null,
 };
 
-const mapStateToProps = state => ({
-  general: state.general
+const mapStateToProps = (state) => ({
+  general: state.general,
 });
 const mapActionsToProps = {
   getContentById: getContentById,
-  clearContentById: clearContentById
+  clearContentById: clearContentById,
 };
 export default connect(
   mapStateToProps,

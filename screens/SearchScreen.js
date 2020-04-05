@@ -112,8 +112,8 @@ class ScreenScreen extends React.Component {
         <LinearGradient
           colors={[themes.secondary, themes.primary]}
           style={{
-            borderBottomLeftRadius: 25,
-            borderBottomRightRadius: 25,
+            borderBottomLeftRadius: 5,
+            borderBottomRightRadius: 5,
             elevation: 2,
             marginBottom: 2.5,
           }}
@@ -146,31 +146,23 @@ class ScreenScreen extends React.Component {
                   width: "90%",
                   justifyContent: "center",
                   alignSelf: "center",
-                  backgroundColor: "#E1E0E2",
+                  backgroundColor: themes.background,
                   marginBottom: 5,
                   borderRadius: 10,
                 }}
                 animation={"zoomIn"}
                 duration={200}
               >
-                {/* <Icon
-                  name="ios-search"
-                  size={20}
-                  color="#000"
-                  style={{
-                    alignSelf: "center",
-                    marginLeft: 10
-                  }}
-                /> */}
                 <TextInput
                   style={{
                     padding: 8,
                     display: "flex",
                     fontSize: 15,
                     width: "84%",
+                    color: themes.primaryTextColor,
                   }}
                   maxLength={25}
-                  placeholder="Search Meal Box..."
+                  placeholder="Search Movie, TV Series..."
                   value={this.state.searchText}
                   onChangeText={this._SearchTextHandler}
                   onSubmitEditing={this._onSubmitEditing}
@@ -182,7 +174,7 @@ class ScreenScreen extends React.Component {
                     style={{
                       alignSelf: "center",
                       marginRight: 15,
-                      color: "#000",
+                      color: themes.primaryTextColor,
                     }}
                     onPress={() => {
                       this._SearchTextHandler("");
@@ -195,7 +187,7 @@ class ScreenScreen extends React.Component {
                     style={{
                       alignSelf: "center",
                       marginRight: 15,
-                      color: "#000",
+                      color: themes.primaryTextColor,
                     }}
                   />
                 )}
@@ -224,7 +216,7 @@ class ScreenScreen extends React.Component {
                       paddingTop: 10,
                       paddingBottom: 10,
                       marginVertical: 2,
-                      backgroundColor: "#E1E0E2",
+                      backgroundColor: themes.background,
                       elevation: 0,
                     }}
                     onPress={() =>
@@ -237,14 +229,25 @@ class ScreenScreen extends React.Component {
                           height: 42.5,
                           width: 61,
                           borderRadius: 3,
-                          backgroundColor: "red",
                           marginRight: 20,
                         }}
                         source={{ uri: item.contentThumbnailUrl }}
                       />
                       <View>
-                        <Text style={{ fontSize: 16 }}>{item.name}</Text>
-                        <Text style={{ fontSize: 14 }}>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            color: themes.primaryTextColor,
+                          }}
+                        >
+                          {item.name}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: themes.primaryTextColor,
+                          }}
+                        >
                           {_.join(item.genres, ", ")}
                         </Text>
                       </View>
@@ -254,7 +257,7 @@ class ScreenScreen extends React.Component {
                       style={{
                         transform: [{ rotate: "45 deg" }],
                         fontSize: 20,
-                        color: "#000",
+                        color: themes.primaryTextColor,
                       }}
                     />
                   </Button>
@@ -270,15 +273,19 @@ class ScreenScreen extends React.Component {
                       paddingTop: 10,
                       paddingBottom: 10,
                       marginVertical: 2,
-                      backgroundColor: "#E1E0E2",
+                      backgroundColor: themes.background,
                       elevation: 0,
                     }}
                     onPress={() => this._onHistorySelection(item)}
                   >
-                    <Text>{item}</Text>
+                    <Text
+                      style={{ fontSize: 16, color: themes.primaryTextColor }}
+                    >
+                      {item}
+                    </Text>
                     <Icon
                       name="close-circle-outline"
-                      style={{ fontSize: 20, color: "#000" }}
+                      style={{ fontSize: 20, color: themes.primaryTextColor }}
                       onPress={() => {
                         this._onRemoveClick(item);
                       }}
@@ -297,6 +304,7 @@ class ScreenScreen extends React.Component {
                     fontWeight: "500",
                     marginHorizontal: 20,
                     marginVertical: 10,
+                    color: themes.primaryTextColor,
                   }}
                 >
                   {this.state.searchText ? "Search Results" : "Search History"}
@@ -310,6 +318,7 @@ class ScreenScreen extends React.Component {
                   style={{
                     marginHorizontal: 10,
                     marginBottom: 5,
+                    color: themes.primaryTextColor,
                   }}
                 >
                   {this.state.searchText ? "No Suggestion" : "Not Found"}
