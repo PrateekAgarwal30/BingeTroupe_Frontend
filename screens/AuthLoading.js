@@ -18,7 +18,10 @@ class AuthLoading extends React.Component {
     this._loadFontAsync();
   }
   _loadFontAsync = async () => {
-    Font.loadAsync({ diavlo: require("../assets/Diavlo.ttf") })
+    Font.loadAsync({
+      diavlo: require("../assets/Diavlo.ttf"),
+      helvetica: require("../assets/Helvetica.ttf"),
+    })
       .then(async () => {
         this.props.getHomeConfig();
       })

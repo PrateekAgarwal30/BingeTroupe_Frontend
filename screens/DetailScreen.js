@@ -10,18 +10,22 @@ import {
 import { Header, Button, Left, Right, Body, Icon, Content } from "native-base";
 // import Icon from '@expo/vector-icons/Ionicons';
 import { connect } from "react-redux";
-import { getContentById, clearContentById } from "../redux/actions";
-
+import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import _ from "lodash";
-
-import { withAppContextConsumer } from "./../components/AppContext";
-const { width } = Dimensions.get("screen");
 import { ScreenOrientation } from "expo";
+import { getContentById, clearContentById } from "../redux/actions";
+import { withAppContextConsumer } from "./../components/AppContext";
+import getGenreTitle from "../utils/getGenreTitle";
+
+const { width } = Dimensions.get("screen");
+
 class DetailScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isInWatchList: true,
+    };
   }
 
   async componentDidMount() {
@@ -44,9 +48,13 @@ class DetailScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener("hardwareBackPress", this._onBackPressed);
+    BackHandler.removeEventListener("hardwareBa ckPress", this._onBackPressed);
   }
-
+  _handleWatchListClick = (isInWatchList) => {
+    console.log("isInWatchList", isInWatchList);
+    console.log(this.state);
+    this.setState({ isInWatchList });
+  };
   render() {
     const { params } = this.props.navigation.state;
     const { themes } = this.props;
@@ -102,7 +110,7 @@ class DetailScreen extends React.Component {
                     fontWeight: "bold",
                   }}
                 >
-                  {"My WatchList"}
+                  {params.name}
                 </Text>
               </Body>
               <Right style={{ flex: 1 }}></Right>
@@ -146,116 +154,87 @@ class DetailScreen extends React.Component {
               </Button>
             </View>
           </ImageBackground>
+          <View style={{ marginTop: 20, marginHorizontal: 10 }}>
+            <View
+              style={{ flexDirection: "row", justifyContent: "space-between" }}
+            >
+              <Text
+                style={{
+                  fontSize: 26,
+                  fontWeight: "500",
+                  color: themes.primaryTextColor,
+                  fontFamily: "helvetica",
+                  maxWidth: "90%",
+                }}
+              >
+                {pageData.name}
+              </Text>
+              {this.state.isInWatchList ? (
+                <Animatable.View
+                  animation="fadeIn"
+                  iterationCount={1}
+                  style={{ padding: 5 }}
+                  duration={1200}
+                >
+                  <Icon
+                    name="md-checkmark-circle-outline"
+                    style={{
+                      color: themes.primaryTextColor,
+                      fontSize: 27,
+                      textAlignVertical: "center",
+                    }}
+                    onPress={() => {
+                      this._handleWatchListClick(false);
+                    }}
+                  />
+                </Animatable.View>
+              ) : (
+                <Animatable.View
+                  animation="fadeIn"
+                  iterationCount={1}
+                  style={{ padding: 5 }}
+                  duration={1200}
+                >
+                  <Icon
+                    name="md-add-circle-outline"
+                    style={{
+                      color: themes.primaryTextColor,
+                      fontSize: 27,
+                      textAlignVertical: "center",
+                    }}
+                    onPress={() => {
+                      this._handleWatchListClick(true);
+                    }}
+                  />
+                </Animatable.View>
+              )}
+            </View>
 
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: "400",
-              marginLeft: 10,
-              color: themes.primaryTextColor,
-            }}
-          >
-            {pageData.name}
-          </Text>
-          <Text
-            style={{
-              fontSize: 12,
-              fontWeight: "400",
-              marginLeft: 10,
-              color: themes.primaryTextColor,
-            }}
-          >
-            {pageData.subtitle}
-          </Text>
-          <Text
-            style={{
-              fontSize: 14,
-              fontWeight: "400",
-              marginLeft: 10,
-              marginTop: 10,
-              color: themes.primaryTextColor,
-            }}
-          >
-            {pageData.body}
-          </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              marginHorizontal: 10,
-            }}
-          >
-            <Button
-              style={{
-                backgroundColor: themes.primary,
-                width: width / 3 - 10,
-                height: 35,
-                marginHorizontal: 2,
-              }}
-              onPress={() => {
-                this.props.navigation.navigate("FullScreenPlayer", {
-                  videoUri: `${pageData.contentVideoUrl}`,
-                });
-              }}
-            >
+            <View>
               <Text
                 style={{
-                  fontSize: 12,
-                  color: themes.secondaryTextColor,
-                  width: "100%",
-                  textAlign: "center",
+                  fontSize: 14,
+                  fontWeight: "500",
+                  color: themes.primaryTextColor,
+                  fontFamily: "helvetica",
                 }}
               >
-                View
+                {_.join(
+                  _.map(pageData.genres, (x) => getGenreTitle(x)),
+                  " . "
+                )}
               </Text>
-            </Button>
-            <Button
+            </View>
+            <Text
               style={{
-                backgroundColor: themes.primary,
-                width: width / 3 - 10,
-                height: 35,
-                marginHorizontal: 2,
-              }}
-              onPress={() => {
-                this.props.navigation.navigate("FullScreenPlayer", {
-                  videoUri: `${pageData.contentVideoUrl}`,
-                });
+                fontSize: 14,
+                fontWeight: "400",
+                marginTop: 10,
+                color: themes.primaryTextColor,
               }}
             >
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: themes.secondaryTextColor,
-                  width: "100%",
-                  textAlign: "center",
-                }}
-              >
-                View
-              </Text>
-            </Button>
-            <Button
-              style={{
-                backgroundColor: themes.primary,
-                width: width / 3 - 10,
-                height: 35,
-                marginHorizontal: 2,
-              }}
-              onPress={() => {
-                this.props.navigation.navigate("FullScreenPlayer", {
-                  videoUri: `${pageData.contentVideoUrl}`,
-                });
-              }}
-            >
-              <Icon name={"heart"} style={{ fontSize: 16 }} />
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: themes.secondaryTextColor,
-                }}
-              >
-                View
-              </Text>
-            </Button>
+              {pageData.body}
+            </Text>
           </View>
         </Content>
       </View>
