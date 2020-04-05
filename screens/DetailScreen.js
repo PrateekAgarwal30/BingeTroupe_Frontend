@@ -5,6 +5,7 @@ import {
   Dimensions,
   BackHandler,
   ActivityIndicator,
+  ImageBackground,
 } from "react-native";
 import { Header, Button, Left, Right, Body, Icon, Content } from "native-base";
 // import Icon from '@expo/vector-icons/Ionicons';
@@ -15,7 +16,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import _ from "lodash";
 
 import { withAppContextConsumer } from "./../components/AppContext";
-import { Video } from "expo-av";
 const { width } = Dimensions.get("screen");
 import { ScreenOrientation } from "expo";
 class DetailScreen extends React.Component {
@@ -55,7 +55,6 @@ class DetailScreen extends React.Component {
       return <ActivityIndicator />;
     }
     const pageData = detailPageContent[0];
-    // console.log(pageData);
     return (
       <View
         style={{
@@ -64,77 +63,90 @@ class DetailScreen extends React.Component {
           backgroundColor: themes.background,
         }}
       >
-        <LinearGradient
-          colors={[themes.secondary, themes.primary]}
-          style={{
-            borderBottomLeftRadius: 5,
-            borderBottomRightRadius: 5,
-            elevation: 2,
-          }}
-        >
-          <Header transparent>
-            <Left style={{ flex: 1 }}>
+        <Content>
+          <LinearGradient
+            colors={["transparent", themes.background]}
+            start={[0.0, 0.85]}
+            style={{
+              elevation: 2,
+              height: (width * 11) / 16 - 5,
+              zIndex: 1,
+            }}
+          >
+            <Header transparent>
+              <Left style={{ flex: 1 }}>
+                <Button
+                  transparent
+                  onPress={() => this.props.navigation.goBack()}
+                >
+                  <Icon
+                    name="ios-arrow-back"
+                    style={{
+                      color: themes.secondaryTextColor,
+                      fontSize: 25,
+                      margin: 0,
+                      padding: 0,
+                    }}
+                  />
+                </Button>
+              </Left>
+              <Body
+                style={{
+                  flex: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: themes.secondaryTextColor,
+                    fontWeight: "bold",
+                  }}
+                >
+                  {"My WatchList"}
+                </Text>
+              </Body>
+              <Right style={{ flex: 1 }}></Right>
+            </Header>
+          </LinearGradient>
+          <ImageBackground
+            style={{
+              height: (width * 11) / 16 - 5,
+              width: width,
+              borderRadius: 3,
+              marginRight: 20,
+              position: "absolute",
+              top: 0,
+              left: 0,
+            }}
+            source={{
+              uri: `${pageData.contentImageUrl}`,
+            }}
+          >
+            <View>
               <Button
                 transparent
-                onPress={() => this.props.navigation.navigate("Home")}
+                rounded
+                style={{
+                  marginTop: 70,
+                  height: "70%",
+                  width: "100%",
+                  justifyContent: "center",
+                  zIndex: 2,
+                }}
+                onPress={() => {
+                  this.props.navigation.navigate("FullScreenPlayer", {
+                    videoUri: `${pageData.contentVideoUrl}`,
+                  });
+                }}
               >
                 <Icon
-                  name="ios-arrow-back"
-                  style={{ color: "white", fontSize: 25 }}
+                  name="md-play-circle"
+                  style={{ color: themes.secondaryTextColor, fontSize: 70 }}
                 />
               </Button>
-            </Left>
-            <Body style={{ flex: 10 }}>
-              <Text
-                style={{ fontSize: 16, color: "white", fontWeight: "bold" }}
-              >
-                {params.name}
-              </Text>
-            </Body>
-            <Right style={{ flex: 1 }} />
-          </Header>
-        </LinearGradient>
-        <Content>
-          <Video
-            source={{
-              uri: `${pageData.contentVideoUrl}`,
-            }}
-            rate={1.0}
-            volume={1.0}
-            isMuted={false}
-            resizeMode="cover"
-            style={{
-              width: width - 10,
-              height: (width * 9) / 16 - 5,
-              borderRadius: 2,
-              marginTop: 5,
-              marginHorizontal: 5,
-            }}
-            durationMillis={1000}
-            // isPlaying={true}
-            // useNativeControls={true}
-            onFullscreenUpdate={async (x) => {
-              if (x.fullscreenUpdate < 2) {
-                await ScreenOrientation.lockAsync(
-                  ScreenOrientation.Orientation.LANDSCAPE
-                );
-              } else {
-                await ScreenOrientation.lockAsync(
-                  ScreenOrientation.Orientation.PORTRAIT
-                );
-              }
-            }}
-            // orientation={"landscape"}
-            onLoadStart={() => {
-              console.log("onLoadStart");
-            }}
-            ref={(videoRef) => (this.videoRef = videoRef)}
-            usePoster={true}
-            posterSource={{
-              uri:
-                "https://storage.googleapis.com/brunch-pvt-ltd.appspot.com/banners/sintel-poster.jpg",
-            }}
-          />
+            </View>
+          </ImageBackground>
+
           <Text
             style={{
               fontSize: 20,
@@ -166,15 +178,85 @@ class DetailScreen extends React.Component {
           >
             {pageData.body}
           </Text>
-          <Button
-            onPress={() => {
-              this.props.navigation.navigate("FullScreenPlayer", {
-                videoUri: `${pageData.contentVideoUrl}`,
-              });
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-around",
+              marginHorizontal: 10,
             }}
           >
-            <Text>View</Text>
-          </Button>
+            <Button
+              style={{
+                backgroundColor: themes.primary,
+                width: width / 3 - 10,
+                height: 35,
+                marginHorizontal: 2,
+              }}
+              onPress={() => {
+                this.props.navigation.navigate("FullScreenPlayer", {
+                  videoUri: `${pageData.contentVideoUrl}`,
+                });
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: themes.secondaryTextColor,
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                View
+              </Text>
+            </Button>
+            <Button
+              style={{
+                backgroundColor: themes.primary,
+                width: width / 3 - 10,
+                height: 35,
+                marginHorizontal: 2,
+              }}
+              onPress={() => {
+                this.props.navigation.navigate("FullScreenPlayer", {
+                  videoUri: `${pageData.contentVideoUrl}`,
+                });
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: themes.secondaryTextColor,
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
+                View
+              </Text>
+            </Button>
+            <Button
+              style={{
+                backgroundColor: themes.primary,
+                width: width / 3 - 10,
+                height: 35,
+                marginHorizontal: 2,
+              }}
+              onPress={() => {
+                this.props.navigation.navigate("FullScreenPlayer", {
+                  videoUri: `${pageData.contentVideoUrl}`,
+                });
+              }}
+            >
+              <Icon name={"heart"} style={{ fontSize: 16 }} />
+              <Text
+                style={{
+                  fontSize: 12,
+                  color: themes.secondaryTextColor,
+                }}
+              >
+                View
+              </Text>
+            </Button>
+          </View>
         </Content>
       </View>
     );
