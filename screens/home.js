@@ -2,7 +2,7 @@ import React from "react";
 import { View, SectionList } from "react-native";
 import { Header, Button, Left, Right, Body, Icon } from "native-base";
 import { connect } from "react-redux";
-import { getHomeConfig } from "../redux/actions";
+import { getHomeConfig, refreshWatchList } from "../redux/actions";
 
 import { LinearGradient } from "expo-linear-gradient";
 import _ from "lodash";
@@ -33,6 +33,7 @@ class Home extends React.Component {
 
   async componentDidMount() {
     try {
+      this.props.refreshWatchList("refresh");
     } catch (err) {
       console.log(err.message);
     }
@@ -187,6 +188,7 @@ const mapStateToProps = (state) => ({
 });
 const mapActionsToProps = {
   getHomeConfig: getHomeConfig,
+  refreshWatchList: refreshWatchList,
 };
 export default connect(
   mapStateToProps,

@@ -24,7 +24,11 @@ import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import _ from "lodash";
 // import { ScreenOrientation } from "expo";
-import { getContentById, clearContentById } from "../redux/actions";
+import {
+  getContentById,
+  clearContentById,
+  refreshWatchList,
+} from "../redux/actions";
 import { withAppContextConsumer } from "./../components/AppContext";
 import { getGenreTitle, getCOntentDuration } from "../utils/generalFuctions";
 import {
@@ -36,9 +40,6 @@ const { width } = Dimensions.get("screen");
 class DetailScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isInWatchList: true,
-    };
   }
 
   async componentDidMount() {
@@ -63,10 +64,12 @@ class DetailScreen extends React.Component {
   componentWillUnmount() {
     // BackHandler.removeEventListener("hardwareBa ckPress", this._onBackPressed);
   }
-  _handleWatchListClick = (isInWatchList) => {
-    // console.log("isInWatchList", isInWatchList);
-    // console.log(this.state);
-    this.setState({ isInWatchList });
+  _handleWatchListClick = (addToWL, contentId) => {
+    if (addToWL) {
+      this.props.refreshWatchList("add", contentId);
+    } else {
+      this.props.refreshWatchList("remove", contentId);
+    }
   };
   _onSimilarContentClick = (data) => {
     // console.log("Cklicke");
@@ -77,9 +80,13 @@ class DetailScreen extends React.Component {
   render() {
     const { params } = this.props.navigation.state;
     const { themes } = this.props;
-    const { detailPageContentLoading, detailPageContent } = this.props.general;
+    const {
+      detailPageContentLoading,
+      detailPageContent,
+      watchList,
+    } = this.props.general;
     const pageData = detailPageContent;
-    // console.log(pageData);
+    const isInWatchList = _.indexOf(watchList, params.id) >= 0;
     return (
       <View
         style={{
@@ -238,7 +245,7 @@ class DetailScreen extends React.Component {
                 >
                   {pageData.name}
                 </Text>
-                {this.state.isInWatchList ? (
+                {isInWatchList ? (
                   <Animatable.View
                     animation="fadeIn"
                     iterationCount={1}
@@ -253,7 +260,7 @@ class DetailScreen extends React.Component {
                         textAlignVertical: "center",
                       }}
                       onPress={() => {
-                        this._handleWatchListClick(false);
+                        this._handleWatchListClick(false, pageData._id);
                       }}
                     />
                   </Animatable.View>
@@ -272,7 +279,7 @@ class DetailScreen extends React.Component {
                         textAlignVertical: "center",
                       }}
                       onPress={() => {
-                        this._handleWatchListClick(true);
+                        this._handleWatchListClick(true, pageData._id);
                       }}
                     />
                   </Animatable.View>
@@ -401,6 +408,7 @@ const mapStateToProps = (state) => ({
 const mapActionsToProps = {
   getContentById: getContentById,
   clearContentById: clearContentById,
+  refreshWatchList: refreshWatchList,
 };
 export default connect(
   mapStateToProps,

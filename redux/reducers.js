@@ -9,7 +9,9 @@ const initialState = {
   detailPageContent: null,
   searchSuggestionsErr: null,
   searchSuggestionsLoading: false,
-  searchSuggestions: null
+  searchSuggestions: null,
+  refreshWatchListLoading: false,
+  watchList: null,
 };
 const generalDataReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -20,58 +22,69 @@ const generalDataReducer = (state = initialState, action) => {
         ...state,
         homeConfigErr: null,
         homeConfigLoading: false,
-        homeConfig: action.payload
+        homeConfig: action.payload,
       };
     case GENERAL.GET_HOME_CONFIG_REJECTED:
       return {
         ...state,
         homeConfigLoading: false,
-        homeConfigErr: action.payload
+        homeConfigErr: action.payload,
       };
     case GENERAL.GET_CONTENT_BY_ID_SENT:
       return {
         ...state,
         detailPageContentErr: null,
-        detailPageContentLoading: true
+        detailPageContentLoading: true,
       };
     case GENERAL.GET_CONTENT_BY_ID_FULFILLED:
       return {
         ...state,
         detailPageContentErr: null,
         detailPageContentLoading: false,
-        detailPageContent: action.payload
+        detailPageContent: action.payload,
       };
     case GENERAL.GET_CONTENT_BY_ID_REJECTED:
       return {
         ...state,
         detailPageContentLoading: false,
-        detailPageContentErr: action.payload
+        detailPageContentErr: action.payload,
       };
     case GENERAL.CLEAR_CONTENT_BY_ID:
       return {
         ...state,
         detailPageContentErr: null,
         detailPageContentLoading: false,
-        detailPageContent: null
+        detailPageContent: null,
       };
     case GENERAL.GET_SEARCH_SUGGESTION_SENT:
       return {
         ...state,
         searchSuggestionsErr: null,
-        searchSuggestionsLoading: true
+        searchSuggestionsLoading: true,
       };
     case GENERAL.GET_SEARCH_SUGGESTION_FULFILLED:
       return {
         ...state,
         searchSuggestionsErr: null,
         searchSuggestionsLoading: false,
-        searchSuggestions: action.payload
+        searchSuggestions: action.payload,
       };
     case GENERAL.GET_SEARCH_SUGGESTION_REJECTED:
       return {
         ...state,
         searchSuggestionsLoading: false,
-        searchSuggestionsErr: action.payload
+        searchSuggestionsErr: action.payload,
+      };
+    case GENERAL.GET_WATCHLIST_SENT:
+      return {
+        ...state,
+        refreshWatchListLoading: true,
+      };
+    case GENERAL.GET_WATCHLIST_FULFILLED:
+      return {
+        ...state,
+        refreshWatchListLoading: false,
+        watchList: action.payload,
       };
     default:
       return { ...state };
@@ -87,6 +100,6 @@ const profileDataReducer = (state = {}, action) => {
 
 const reducer = combineReducers({
   general: generalDataReducer,
-  profile: profileDataReducer
+  profile: profileDataReducer,
 });
 export default reducer;
