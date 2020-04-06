@@ -84,6 +84,7 @@ class DetailScreen extends React.Component {
       detailPageContentLoading,
       detailPageContent,
       watchList,
+      refreshWatchListLoading,
     } = this.props.general;
     const pageData = detailPageContent;
     const isInWatchList = _.indexOf(watchList, params.id) >= 0;
@@ -245,7 +246,19 @@ class DetailScreen extends React.Component {
                 >
                   {pageData.name}
                 </Text>
-                {isInWatchList ? (
+                {refreshWatchListLoading ? (
+                  <Animatable.View
+                    animation="fadeIn"
+                    iterationCount={1}
+                    style={{ padding: 5 }}
+                    duration={1200}
+                  >
+                    <ActivityIndicator
+                      color={themes.primaryTextColor}
+                      style={{ paddingVertical: 4, paddingHorizontal: 3 }}
+                    />
+                  </Animatable.View>
+                ) : isInWatchList ? (
                   <Animatable.View
                     animation="fadeIn"
                     iterationCount={1}
