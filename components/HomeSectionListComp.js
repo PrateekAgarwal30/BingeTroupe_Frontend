@@ -7,11 +7,11 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   FlatList,
-  Alert
+  Alert,
 } from "react-native";
 import { Icon } from "native-base";
 
-const styles = themes =>
+const styles = (themes) =>
   StyleSheet.create({
     header: {
       backgroundColor: themes.background,
@@ -19,19 +19,19 @@ const styles = themes =>
       borderRadius: 5,
       flexDirection: "row",
       justifyContent: "space-between",
-      alignItems: "center"
+      alignItems: "center",
     },
     headerText: {
       fontSize: 20,
       fontWeight: "400",
       marginLeft: 10,
-      color: themes.primaryTextColor
+      color: themes.primaryTextColor,
     },
     noTxnText: {
       fontSize: 20,
       paddingVertical: 10,
-      alignSelf: "center"
-    }
+      alignSelf: "center",
+    },
   });
 
 export const ContentListItem = ({ contentData, onContentClick }) => {
@@ -42,7 +42,7 @@ export const ContentListItem = ({ contentData, onContentClick }) => {
         // backgroundColor: "white",
         marginVertical: 2.5,
         marginHorizontal: 2.5,
-        borderRadius: 10
+        borderRadius: 10,
       }}
     >
       <Animatable.View animation="fadeIn" iterationCount={1}>
@@ -53,12 +53,12 @@ export const ContentListItem = ({ contentData, onContentClick }) => {
           underlayColor={"#E1E0E2"}
           style={{
             borderRadius: 10,
-            width: "100%"
+            width: "100%",
           }}
         >
           <View>
             <Animatable.Image
-              source={{ uri: `${contentData.contentThumbnailUrl}` }}
+              source={{ uri: `${contentData.contentTmbImgVeritcalUrl}` }}
               style={{ height: 188, width: 131, borderRadius: 10 }}
               iterationCount={1}
               animation={"fadeIn"}
@@ -69,7 +69,7 @@ export const ContentListItem = ({ contentData, onContentClick }) => {
                 fontSize: 13,
                 marginLeft: 2,
                 fontWeight: "bold",
-                width: 100
+                width: 100,
               }}
               numberOfLines={2}
             >
@@ -93,7 +93,7 @@ export const GenreHeaderComponent = ({
   headerData,
   genreId,
   themes,
-  count
+  count,
 }) => {
   return (
     <Animatable.View
@@ -107,7 +107,7 @@ export const GenreHeaderComponent = ({
           style={{
             backgroundColor: themes.backgroundColor,
             marginRight: 5,
-            flexDirection: "row"
+            flexDirection: "row",
           }}
           onPress={() => Alert.alert("Work In Progress!")}
         >
@@ -125,7 +125,7 @@ export const RenderSectionListItem = ({ item, onContentClick }) => {
   return (
     <FlatList
       data={item.flatListData}
-      keyExtractor={itemData => itemData._id}
+      keyExtractor={(itemData) => itemData._id}
       renderItem={({ item }) => (
         <ContentListItem contentData={item} onContentClick={onContentClick} />
       )}

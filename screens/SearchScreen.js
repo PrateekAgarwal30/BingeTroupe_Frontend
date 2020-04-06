@@ -231,7 +231,7 @@ class ScreenScreen extends React.Component {
                           borderRadius: 3,
                           marginRight: 20,
                         }}
-                        source={{ uri: item.contentThumbnailUrl }}
+                        source={{ uri: item.contentTmbImgHorizontalUrl }}
                       />
                       <View>
                         <Text

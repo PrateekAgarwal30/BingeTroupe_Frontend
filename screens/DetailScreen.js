@@ -77,7 +77,7 @@ class DetailScreen extends React.Component {
             start={[0.0, 0.85]}
             style={{
               elevation: 2,
-              height: (width * 11) / 16 - 5,
+              height: (width * 12) / 16 - 5,
               zIndex: 1,
             }}
           >
@@ -118,7 +118,7 @@ class DetailScreen extends React.Component {
           </LinearGradient>
           <ImageBackground
             style={{
-              height: (width * 11) / 16 - 5,
+              height: (width * 12) / 16 - 5,
               width: width,
               borderRadius: 3,
               marginRight: 20,
@@ -127,7 +127,7 @@ class DetailScreen extends React.Component {
               left: 0,
             }}
             source={{
-              uri: `${pageData.contentImageUrl}`,
+              uri: `${pageData.contentTmbImgHorizontalUrl}`,
             }}
           >
             <View>
@@ -136,7 +136,7 @@ class DetailScreen extends React.Component {
                 rounded
                 style={{
                   marginTop: 70,
-                  height: "70%",
+                  height: "60%",
                   width: "100%",
                   justifyContent: "center",
                   zIndex: 2,
