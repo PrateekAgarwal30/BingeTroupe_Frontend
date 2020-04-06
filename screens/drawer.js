@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Image } from "react-native";
+import { Text, View, StyleSheet, Image, Alert } from "react-native";
 import { Notifications } from "expo";
 import * as Permissions from "expo-permissions";
 import { connect } from "react-redux";
@@ -8,6 +8,7 @@ import _ from "lodash";
 import { withAppContextConsumer } from "../components/AppContext";
 import Separator from "../components/common/Separator";
 import DrawerButton from "../components/common/DrawerButton";
+
 class Drawer extends React.Component {
   async componentDidMount() {
     try {
@@ -93,33 +94,49 @@ class Drawer extends React.Component {
             onDrawerButtonClick={this._onDrawerButtonClick}
             currentActiveScreen={currentActiveScreen}
             themes={themes}
+            isAntDesignIcon
+          />
+          <Separator />
+          <DrawerButton
+            label={"Explore"}
+            iconName={"appstore-o"}
+            screenId={"ExploreScreen"}
+            onDrawerButtonClick={() => {
+              Alert.alert("Work in Progress!");
+            }}
+            currentActiveScreen={currentActiveScreen}
+            themes={themes}
+            isAntDesignIcon
           />
           <Separator />
           <DrawerButton
             label={"Search"}
-            iconName={"search"}
+            iconName={"search1"}
             screenId={"SearchScreen"}
             onDrawerButtonClick={this._onDrawerButtonClick}
             currentActiveScreen={currentActiveScreen}
             themes={themes}
+            isAntDesignIcon
           />
           <Separator />
           <DrawerButton
             label={"My Watchlist"}
-            iconName={"bookmark"}
+            iconName={"bookmark-outline"}
             screenId={"MyWatchList"}
             onDrawerButtonClick={this._onDrawerButtonClick}
             currentActiveScreen={currentActiveScreen}
             themes={themes}
+            isMaterialCommunityIcons
           />
           <Separator />
           <DrawerButton
             label={"Settings"}
-            iconName={"md-settings"}
+            iconName={"setting"}
             screenId={"Settings"}
             onDrawerButtonClick={this._onDrawerButtonClick}
             currentActiveScreen={currentActiveScreen}
             themes={themes}
+            isAntDesignIcon
           />
           {/* <Separator />
           <View

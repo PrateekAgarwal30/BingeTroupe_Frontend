@@ -1,7 +1,8 @@
 import React from "react";
 import { Text } from "react-native";
 import { Icon, Button } from "native-base";
-
+import AntDesignIcon from "@expo/vector-icons/AntDesign";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 export default ({
   themes,
   label,
@@ -9,6 +10,8 @@ export default ({
   iconName,
   currentActiveScreen,
   onDrawerButtonClick,
+  isAntDesignIcon,
+  isMaterialCommunityIcons,
 }) => (
   <Button
     style={{
@@ -24,13 +27,33 @@ export default ({
       onDrawerButtonClick(screenId);
     }}
   >
-    <Icon
-      name={iconName}
-      style={{
-        fontSize: 24,
-        color: themes.primary,
-      }}
-    />
+    {isAntDesignIcon ? (
+      <AntDesignIcon
+        name={iconName}
+        style={{
+          fontSize: 24,
+          color: themes.primary,
+        }}
+      />
+    ) : null}
+    {isMaterialCommunityIcons ? (
+      <MaterialCommunityIcons
+        name={iconName}
+        style={{
+          fontSize: 24,
+          color: themes.primary,
+        }}
+      />
+    ) : null}
+    {!(isAntDesignIcon || isMaterialCommunityIcons) ? (
+      <Icon
+        name={iconName}
+        style={{
+          fontSize: 24,
+          color: themes.primary,
+        }}
+      />
+    ) : null}
     <Text
       style={{
         fontSize: 11,
