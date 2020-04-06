@@ -69,7 +69,7 @@ class DetailScreen extends React.Component {
     this.setState({ isInWatchList });
   };
   _onSimilarContentClick = (data) => {
-    console.log("Cklicke");
+    // console.log("Cklicke");
     // this.props.navigation.goBack();
     this.props.navigation.navigate("DetailScreen", { ...data, key: data.id });
     this.props.getContentById(data.id);
@@ -278,11 +278,14 @@ class DetailScreen extends React.Component {
                   </Animatable.View>
                 )}
               </View>
-              <Content style={{ marginTop: 20 }}>
+              <Content
+                showsVerticalScrollIndicator={false}
+                style={{ marginTop: 0 }}
+              >
                 <View>
                   <Text
                     style={{
-                      fontSize: 14,
+                      fontSize: 16,
                       fontWeight: "500",
                       color: themes.primaryTextColor,
                       fontFamily: "helvetica",
@@ -356,7 +359,7 @@ class DetailScreen extends React.Component {
                 </View>
                 <Text
                   style={{
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: "400",
                     marginTop: 10,
                     color: themes.primaryTextColor,
