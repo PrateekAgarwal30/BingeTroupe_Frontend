@@ -12,6 +12,9 @@ const initialState = {
   searchSuggestions: null,
   refreshWatchListLoading: false,
   watchList: null,
+  wListContentDataLoading: false,
+  wListContentData: null,
+  wListContentDataError: null,
 };
 const generalDataReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -85,6 +88,25 @@ const generalDataReducer = (state = initialState, action) => {
         ...state,
         refreshWatchListLoading: false,
         watchList: action.payload,
+      };
+    case GENERAL.GET_WL_CONTENT_DATA_SENT:
+      return {
+        ...state,
+        wListContentDataErr: null,
+        wListContentDataLoading: true,
+      };
+    case GENERAL.GET_WL_CONTENT_DATA_FULFILLED:
+      return {
+        ...state,
+        wListContentDataErr: null,
+        wListContentDataLoading: false,
+        wListContentData: action.payload,
+      };
+    case GENERAL.GET_WL_CONTENT_DATA_REJECTED:
+      return {
+        ...state,
+        wListContentDataLoading: false,
+        wListContentDataErr: action.payload,
       };
     default:
       return { ...state };

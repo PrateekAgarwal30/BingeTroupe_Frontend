@@ -144,7 +144,9 @@ class Home extends React.Component {
         </LinearGradient>
         <View style={{ flex: 1 }}>
           <SectionList
-            sections={this.props.general.homeConfig.genresData || []}
+            sections={
+              _.get(this.props, "general.homeConfig.genresData", []) || []
+            }
             keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
               <RenderSectionListItem

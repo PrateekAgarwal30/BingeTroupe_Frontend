@@ -15,6 +15,9 @@ export const GENERAL = {
   GET_SEARCH_SUGGESTION_REJECTED: "GET_SEARCH_SUGGESTION_REJECTED",
   GET_WATCHLIST_SENT: "GET_WATCHLIST_SENT",
   GET_WATCHLIST_FULFILLED: "GET_WATCHLIST_FULFILLED",
+  GET_WL_CONTENT_DATA_SENT: "GET_WL_CONTENT_DATA_SENT",
+  GET_WL_CONTENT_DATA_FULFILLED: "GET_WL_CONTENT_DATA_FULFILLED",
+  GET_WL_CONTENT_DATA_REJECTED: "GET_WL_CONTENT_DATA_REJECTED",
 };
 
 export const getHomeConfig = () => async (dispatch) => {
@@ -164,6 +167,36 @@ export const refreshWatchList = (type, contentId) => async (dispatch) => {
     }
   } catch (error) {
     console.log("ERROR refreshWatchList", error.message);
+    return Promise.reject(error.message);
+  }
+};
+
+export const getWatchListDataFromServer = (watchList) => async (dispatch) => {
+  try {
+    dispatch({
+      type: GENERAL.GET_WL_CONTENT_DATA_SENT,
+    });
+    const res = await fetch(ipAddress + `/api/general/fetch_watchlist_data`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ watchList }),
+    });
+    const result = await res.json();
+    if (result._status === "success") {
+      dispatch({
+        type: GENERAL.GET_WL_CONTENT_DATA_FULFILLED,
+        payload: result._data,
+      });
+    } else {
+      dispatch({
+        type: GENERAL.GET_WL_CONTENT_DATA_REJECTED,
+        payload: result._message,
+      });
+    }
+  } catch (error) {
+    console.log("ERROR getWatchListDataFromServer", error.message);
     return Promise.reject(error.message);
   }
 };
